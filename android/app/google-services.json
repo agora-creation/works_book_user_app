@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "878999657230",
+    "project_id": "works-book",
+    "storage_bucket": "works-book.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878999657230:android:9d2ea5c9b8a48fd48d155f",
+        "android_client_info": {
+          "package_name": "com.agoracreation.works_book_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878999657230-jmpl0dhvf2qdbjrb89c63q27nj3f2a48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCaWBTc-NSPjVS5IZnjL7IEr2Q5Hs-CxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878999657230-jmpl0dhvf2qdbjrb89c63q27nj3f2a48.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "878999657230-g4tgrv0m341crehvdc5qm1qejmtgcqkd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agoracreation.worksBookApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878999657230:android:3d1f20bc85df4d298d155f",
+        "android_client_info": {
+          "package_name": "com.agoracreation.works_book_group_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878999657230-jmpl0dhvf2qdbjrb89c63q27nj3f2a48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCaWBTc-NSPjVS5IZnjL7IEr2Q5Hs-CxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878999657230-jmpl0dhvf2qdbjrb89c63q27nj3f2a48.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "878999657230-g4tgrv0m341crehvdc5qm1qejmtgcqkd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agoracreation.worksBookApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878999657230:android:78470591cfa9815c8d155f",
+        "android_client_info": {
+          "package_name": "com.agoracreation.works_book_user_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878999657230-jmpl0dhvf2qdbjrb89c63q27nj3f2a48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCaWBTc-NSPjVS5IZnjL7IEr2Q5Hs-CxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878999657230-jmpl0dhvf2qdbjrb89c63q27nj3f2a48.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "878999657230-g4tgrv0m341crehvdc5qm1qejmtgcqkd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agoracreation.worksBookApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

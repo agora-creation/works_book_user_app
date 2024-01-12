@@ -8,14 +8,15 @@ import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
 import 'package:works_book_user_app/widgets/link_text.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String? errorText;
@@ -67,6 +68,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           ? Text('$errorText', style: kErrorStyle)
                           : Container(),
                       CustomTextFormField(
+                        controller: nameController,
+                        textInputType: TextInputType.name,
+                        maxLines: 1,
+                        label: 'お名前',
+                        color: kBaseColor,
+                        prefix: Icons.person,
+                      ),
+                      const SizedBox(height: 8),
+                      CustomTextFormField(
                         controller: emailController,
                         textInputType: TextInputType.emailAddress,
                         maxLines: 1,
@@ -88,11 +98,12 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: CustomMainButton(
-                          label: 'ログイン',
+                          label: '会員登録',
                           labelColor: kWhiteColor,
                           backgroundColor: kBaseColor,
                           onPressed: () async {
-                            String? error = await userProvider.signIn(
+                            String? error = await userProvider.signUp(
+                              name: nameController.text,
                               email: emailController.text,
                               password: passwordController.text,
                             );
@@ -109,7 +120,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       const SizedBox(height: 8),
                       LinkText(
-                        label: '会員登録はコチラ',
+                        label: 'ログインはコチラ',
                         labelColor: kBaseColor,
                         onTap: () {},
                       ),

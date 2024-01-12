@@ -54,6 +54,41 @@ class UserProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    String? error;
+    if (name == '') return 'お名前を入力してください';
+    if (email == '') return 'メールアドレスを入力してください';
+    if (password == '') return 'パスワードを入力してください';
+    try {
+      _status = AuthStatus.authenticating;
+      notifyListeners();
+      final result = await auth?.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _authUser = result?.user;
+      String token = await fmServices.getToken() ?? '';
+      userService.create({
+        'id': _authUser?.uid,
+        'name': name,
+        'email': email,
+        'password': password,
+        'groupId': '',
+        'token': token,
+        'createdAt': DateTime.now(),
+      });
+    } catch (e) {
+      _status = AuthStatus.unauthenticated;
+      notifyListeners();
+      error = '会員登録に失敗しました';
+    }
+    return error;
+  }
+
   Future signOut() async {
     await auth?.signOut();
     _status = AuthStatus.unauthenticated;
@@ -61,21 +96,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     return Future.delayed(Duration.zero);
   }
-
-  // Future<String?> updateName({required String name}) async {
-  //   String? error;
-  //   if (_group == null) return '会社・組織名の変更に失敗しました';
-  //   if (name == '') return '会社・組織名を入力してください';
-  //   try {
-  //     groupService.update({
-  //       'id': _group?.id,
-  //       'name': name,
-  //     });
-  //   } catch (e) {
-  //     error = e.toString();
-  //   }
-  //   return error;
-  // }
 
   Future reloadUserModel() async {
     _user = await userService.select(_authUser?.uid);

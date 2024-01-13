@@ -106,7 +106,9 @@ class _SignInScreenState extends State<SignInScreen> {
                               }
                               if (!mounted) return;
                               pushReplacementScreen(
-                                  context, const HomeScreen());
+                                context,
+                                const HomeScreen(),
+                              );
                             },
                           ),
                         ),
@@ -114,8 +116,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         LinkText(
                           label: '会員登録はコチラ',
                           labelColor: kBaseColor,
-                          onTap: () =>
-                              pushScreen(context, const SignUpScreen()),
+                          onTap: () => pushScreen(
+                            context,
+                            const SignUpScreen(),
+                          ),
                         ),
                       ],
                     ),

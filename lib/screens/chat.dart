@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   UserMessageModel message = messages[index];
                   return MessageList(
                     message: message,
-                    isMe: message.userId == widget.user?.id,
+                    isMe: message.createdUserId == widget.user?.id,
                     onTapImage: () => showDialog(
                       barrierDismissible: true,
                       barrierLabel: '閉じる',
@@ -105,6 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     'userId': widget.user?.id,
                     'content': '',
                     'image': await task.ref.getDownloadURL(),
+                    'createdUserId': widget.user?.id,
                     'createdAt': DateTime.now(),
                   });
                   List<String> tokens = widget.group?.tokens ?? [];
@@ -193,6 +194,7 @@ class _AddMessageDialogState extends State<AddMessageDialog> {
                     'userId': widget.user?.id,
                     'content': contentController.text,
                     'image': '',
+                    'createdUserId': widget.user?.id,
                     'createdAt': DateTime.now(),
                   });
                   List<String> tokens = widget.group?.tokens ?? [];
@@ -200,7 +202,7 @@ class _AddMessageDialogState extends State<AddMessageDialog> {
                     fmServices.send(
                       token: token,
                       title: '新着メッセージ',
-                      body: '画像を送信しました。',
+                      body: contentController.text,
                     );
                   }
                   if (!mounted) return;

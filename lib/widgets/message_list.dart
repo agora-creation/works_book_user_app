@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
-import 'package:works_book_user_app/models/message.dart';
+import 'package:works_book_user_app/models/user_message.dart';
 
 class MessageList extends StatelessWidget {
-  final MessageModel message;
+  final UserMessageModel message;
   final bool isMe;
   final Function()? onTapImage;
 
@@ -72,14 +72,6 @@ class MessageList extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              message.userName,
-              style: const TextStyle(
-                color: kGrey2Color,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             message.image == ''
                 ? Material(
                     elevation: 4,

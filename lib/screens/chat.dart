@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
-import 'package:works_book_user_app/models/message.dart';
 import 'package:works_book_user_app/models/user.dart';
+import 'package:works_book_user_app/models/user_message.dart';
 import 'package:works_book_user_app/services/fm.dart';
-import 'package:works_book_user_app/services/message.dart';
+import 'package:works_book_user_app/services/user_message.dart';
 import 'package:works_book_user_app/widgets/bottom_right_button.dart';
 import 'package:works_book_user_app/widgets/custom_sub_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
@@ -31,7 +31,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   FmServices fmServices = FmServices();
-  MessageService messageService = MessageService();
+  UserMessageService messageService = UserMessageService();
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +45,11 @@ class _ChatScreenState extends State<ChatScreen> {
               groupId: widget.group?.id,
             ),
             builder: (context, snapshot) {
-              List<MessageModel> messages = [];
+              List<UserMessageModel> messages = [];
               if (snapshot.hasData) {
                 for (DocumentSnapshot<Map<String, dynamic>> doc
                     in snapshot.data!.docs) {
-                  messages.add(MessageModel.fromSnapshot(doc));
+                  messages.add(UserMessageModel.fromSnapshot(doc));
                 }
               }
               if (messages.isEmpty) {
@@ -64,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 reverse: true,
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
-                  MessageModel message = messages[index];
+                  UserMessageModel message = messages[index];
                   return MessageList(
                     message: message,
                     isMe: message.userId == widget.user?.id,
@@ -94,16 +94,15 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                   if (image == null) return;
                   File imageFile = File(image.path);
-                  String id = messageService.id();
+                  String id = messageService.id(widget.user!.id);
                   FirebaseStorage storage = FirebaseStorage.instance;
                   final task = await storage
-                      .ref('chat/${widget.group?.id}/${widget.user?.id}/$id')
+                      .ref('chat/${widget.group?.id}/${widget.user!.id}/$id')
                       .putFile(imageFile);
                   messageService.create({
                     'id': id,
                     'groupId': widget.group?.id,
                     'userId': widget.user?.id,
-                    'userName': widget.user?.name,
                     'content': '',
                     'image': await task.ref.getDownloadURL(),
                     'createdAt': DateTime.now(),
@@ -153,7 +152,7 @@ class AddMessageDialog extends StatefulWidget {
 
 class _AddMessageDialogState extends State<AddMessageDialog> {
   FmServices fmServices = FmServices();
-  MessageService messageService = MessageService();
+  UserMessageService messageService = UserMessageService();
   TextEditingController contentController = TextEditingController();
 
   @override
@@ -187,12 +186,11 @@ class _AddMessageDialogState extends State<AddMessageDialog> {
                 backgroundColor: kBaseColor,
                 onPressed: () async {
                   if (contentController.text == '') return;
-                  String id = messageService.id();
+                  String id = messageService.id(widget.user!.id);
                   messageService.create({
                     'id': id,
                     'groupId': widget.group?.id,
                     'userId': widget.user?.id,
-                    'userName': widget.user?.name,
                     'content': contentController.text,
                     'image': '',
                     'createdAt': DateTime.now(),

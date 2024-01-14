@@ -8,7 +8,7 @@ class UserNoticeService {
   void update(Map<String, dynamic> values) {
     firestore
         .collection(collection)
-        .doc(values['groupId'])
+        .doc(values['userId'])
         .collection(subCollection)
         .doc(values['id'])
         .update(values);
@@ -22,7 +22,7 @@ class UserNoticeService {
         .collection(collection)
         .doc(userId ?? 'error')
         .collection(subCollection)
-        .where('groupId', isEqualTo: groupId ?? 'error')
+        .where('userId', isEqualTo: groupId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
   }

@@ -8,11 +8,13 @@ import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/models/group_in_apply.dart';
+import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/screens/chat.dart';
 import 'package:works_book_user_app/screens/group.dart';
 import 'package:works_book_user_app/screens/group_in_apply.dart';
 import 'package:works_book_user_app/screens/notice.dart';
+import 'package:works_book_user_app/screens/notice_details.dart';
 import 'package:works_book_user_app/screens/plan_details.dart';
 import 'package:works_book_user_app/screens/schedule.dart';
 import 'package:works_book_user_app/services/group.dart';
@@ -45,6 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
     showBottomUpScreen(
       context,
       PlanDetailsScreen(plan: plan),
+    );
+  }
+
+  void _showNoticeDetails(UserNoticeModel notice) {
+    showBottomUpScreen(
+      context,
+      NoticeDetailsScreen(notice: notice),
     );
   }
 
@@ -113,8 +122,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               NoticeScreen(
                 user: userProvider.user,
+                group: group,
+                showNoticeDetails: _showNoticeDetails,
               ),
               ChatScreen(
+                user: userProvider.user,
                 group: group,
               ),
             ],

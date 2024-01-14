@@ -14,11 +14,15 @@ class UserNoticeService {
         .update(values);
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamList(String? userId) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
+    String? userId,
+    String? groupId,
+  }) {
     return firestore
         .collection(collection)
         .doc(userId ?? 'error')
         .collection(subCollection)
+        .where('groupId', isEqualTo: groupId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
   }

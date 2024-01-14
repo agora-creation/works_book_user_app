@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/style.dart';
+import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/models/user.dart';
 import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/services/user_notice.dart';
@@ -8,9 +9,13 @@ import 'package:works_book_user_app/widgets/notice_list.dart';
 
 class NoticeScreen extends StatefulWidget {
   final UserModel? user;
+  final GroupModel? group;
+  final Function(UserNoticeModel) showNoticeDetails;
 
   const NoticeScreen({
     this.user,
+    this.group,
+    required this.showNoticeDetails,
     super.key,
   });
 
@@ -26,7 +31,10 @@ class _NoticeScreenState extends State<NoticeScreen> {
     return Container(
       color: kBackColor,
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: noticeService.streamList(widget.user?.id),
+        stream: noticeService.streamList(
+          userId: widget.user?.id,
+          groupId: widget.group?.id,
+        ),
         builder: (context, snapshot) {
           List<UserNoticeModel> notices = [];
           if (snapshot.hasData) {
@@ -49,6 +57,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
               UserNoticeModel notice = notices[index];
               return NoticeList(
                 notice: notice,
+                onTap: () => widget.showNoticeDetails(notice),
               );
             },
           );

@@ -6,6 +6,7 @@ class UserMessageModel {
   String _userId = '';
   String _content = '';
   String _image = '';
+  String _createdUserId = '';
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -13,6 +14,7 @@ class UserMessageModel {
   String get userId => _userId;
   String get content => _content;
   String get image => _image;
+  String get createdUserId => _createdUserId;
   DateTime get createdAt => _createdAt;
 
   UserMessageModel.fromSnapshot(
@@ -23,6 +25,7 @@ class UserMessageModel {
     _userId = map['userId'] ?? '';
     _content = map['content'] ?? '';
     _image = map['image'] ?? '';
+    _createdUserId = map['createdUserId'] ?? '';
     if (map['createdAt'] != null) {
       _createdAt = map['createdAt'].toDate() ?? DateTime.now();
     }

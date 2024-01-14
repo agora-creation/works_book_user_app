@@ -22,7 +22,7 @@ class UserNoticeService {
         .collection(collection)
         .doc(userId ?? 'error')
         .collection(subCollection)
-        .where('userId', isEqualTo: groupId ?? 'error')
+        .where('groupId', isEqualTo: groupId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
   }

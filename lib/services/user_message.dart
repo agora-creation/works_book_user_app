@@ -49,6 +49,7 @@ class UserMessageService {
         .collection(collection)
         .doc(userId ?? 'error')
         .collection(subCollection)
+        .where('groupId', isEqualTo: groupId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
   }

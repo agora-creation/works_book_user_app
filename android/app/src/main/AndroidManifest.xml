@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="お仕事手帳"
+        android:label="オシゴト予定帳"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

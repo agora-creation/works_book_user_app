@@ -42,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: 80,
                       ),
                       const Text(
-                        'お仕事手帳',
+                        'オシゴト予定帳',
                         style: TextStyle(
                           color: kBaseColor,
                           fontSize: 24,

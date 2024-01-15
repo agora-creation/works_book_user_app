@@ -21,7 +21,6 @@ dependencies:
   shared_preferences: ^2.1.2
   modal_bottom_sheet: ^2.1.2
   persistent_bottom_nav_bar_v2: ^4.2.8
-  multiple_stream_builder: ^3.0.2
   syncfusion_flutter_calendar: ^22.2.8
   syncfusion_localizations: ^22.2.9
   http: ^1.1.0

@@ -2,20 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
-import 'package:works_book_user_app/models/group_in_apply.dart';
 import 'package:works_book_user_app/providers/user.dart';
-import 'package:works_book_user_app/services/group_in_apply.dart';
 import 'package:works_book_user_app/services/user.dart';
 import 'package:works_book_user_app/widgets/custom_edit_list.dart';
 import 'package:works_book_user_app/widgets/link_text.dart';
 
 class GroupScreen extends StatefulWidget {
   final GroupModel group;
-  final GroupInApplyModel groupInApply;
 
   const GroupScreen({
     required this.group,
-    required this.groupInApply,
     super.key,
   });
 
@@ -24,7 +20,6 @@ class GroupScreen extends StatefulWidget {
 }
 
 class _GroupScreenState extends State<GroupScreen> {
-  GroupInApplyService groupInApplyService = GroupInApplyService();
   UserService userService = UserService();
 
   @override
@@ -85,12 +80,10 @@ class _GroupScreenState extends State<GroupScreen> {
               label: 'この会社・組織から脱退する',
               labelColor: kRedColor,
               onTap: () async {
-                groupInApplyService.delete({
-                  'userId': widget.groupInApply.userId,
-                });
                 userService.update({
-                  'id': widget.groupInApply.userId,
+                  'id': userProvider.user?.id,
                   'groupId': '',
+                  'groupInApply': false,
                 });
                 await userProvider.reloadUserModel();
                 if (!mounted) return;

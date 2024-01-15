@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 
-class GroupInApply1 extends StatelessWidget {
+class GroupInApplyNot extends StatelessWidget {
   final Function()? onPressed;
 
-  const GroupInApply1({
+  const GroupInApplyNot({
     this.onPressed,
     super.key,
   });

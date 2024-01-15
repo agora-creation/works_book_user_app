@@ -4,7 +4,7 @@ import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/services/group.dart';
-import 'package:works_book_user_app/services/group_in_apply.dart';
+import 'package:works_book_user_app/services/user.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
 import 'package:works_book_user_app/widgets/group_in_apply_list.dart';
@@ -18,7 +18,7 @@ class GroupInApplyScreen extends StatefulWidget {
 
 class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
   GroupService groupService = GroupService();
-  GroupInApplyService groupInApplyService = GroupInApplyService();
+  UserService userService = UserService();
   GroupModel? group;
   TextEditingController numberController = TextEditingController();
 
@@ -79,15 +79,14 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                             label: '所属申請を送る',
                             labelColor: kWhiteColor,
                             backgroundColor: kBaseColor,
-                            onPressed: () {
-                              groupInApplyService.create({
+                            onPressed: () async {
+                              userService.update({
+                                'id': userProvider.user?.id,
                                 'groupId': group?.id,
-                                'groupName': group?.name,
-                                'userId': userProvider.user?.id,
-                                'userName': userProvider.user?.name,
-                                'accept': false,
-                                'createdAt': DateTime.now(),
+                                'groupInApply': false,
                               });
+                              await userProvider.reloadUserModel();
+                              if (!mounted) return;
                               Navigator.of(context, rootNavigator: true).pop();
                             },
                           ),

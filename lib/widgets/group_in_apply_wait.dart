@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/style.dart';
-import 'package:works_book_user_app/models/group_in_apply.dart';
+import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/widgets/link_text.dart';
 
-class GroupInApply2 extends StatelessWidget {
-  final GroupInApplyModel? groupInApply;
+class GroupInApplyWait extends StatelessWidget {
+  final GroupModel? group;
   final Function()? onTap;
 
-  const GroupInApply2({
-    this.groupInApply,
+  const GroupInApplyWait({
+    this.group,
     this.onTap,
     super.key,
   });
@@ -31,7 +31,7 @@ class GroupInApply2 extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${groupInApply?.groupName}へ所属申請を送信しました。承認されるまで今しばらくお待ちください。',
+                  '${group?.name}へ所属申請を送信しました。承認されるまで今しばらくお待ちください。アプリと閉じても構いません。また、承認されたのに切り替わらない場合は、アプリを再起動してください。',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],

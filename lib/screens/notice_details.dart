@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user_notice.dart';
+import 'package:works_book_user_app/services/user_notice.dart';
 
 class NoticeDetailsScreen extends StatefulWidget {
   final UserNoticeModel notice;
@@ -16,6 +17,22 @@ class NoticeDetailsScreen extends StatefulWidget {
 }
 
 class _NoticeDetailsScreenState extends State<NoticeDetailsScreen> {
+  UserNoticeService noticeService = UserNoticeService();
+
+  void _init() {
+    noticeService.update({
+      'id': widget.notice.id,
+      'userId': widget.notice.userId,
+      'isRead': true,
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

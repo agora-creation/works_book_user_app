@@ -27,12 +27,24 @@ class NoticeList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    dateText('yyyy/MM/dd HH:ss', notice.createdAt),
-                    style: const TextStyle(
-                      color: kGreyColor,
-                      fontSize: 12,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        dateText('yyyy/MM/dd HH:ss', notice.createdAt),
+                        style: const TextStyle(
+                          color: kGreyColor,
+                          fontSize: 12,
+                        ),
+                      ),
+                      notice.isRead == false
+                          ? const Icon(
+                              Icons.circle,
+                              color: kRedColor,
+                              size: 14,
+                            )
+                          : Container(),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(

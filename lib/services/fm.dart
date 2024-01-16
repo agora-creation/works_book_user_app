@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 const key =
     'AAAAzKh2Ww4:APA91bGoEG1VVrDNjpLzij6YhLAflNrAgBPJq6UNWeOKKjGblCwT5t8QYpedZzaleTRVe6HWOS69NB81srKzt0SaFl02r-eAHY_mFnovti5sKO-zgbeBNqzlq4R7bKinoOpinGG21aCZ';
 
-class FmServices {
+class FmService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   final _androidChannel = const AndroidNotificationChannel(
     'high_importance_channel',

@@ -30,7 +30,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  FmServices fmServices = FmServices();
+  FmService fmService = FmService();
   UserMessageService messageService = UserMessageService();
 
   @override
@@ -110,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   });
                   List<String> tokens = widget.group?.tokens ?? [];
                   for (String token in tokens) {
-                    fmServices.send(
+                    fmService.send(
                       token: token,
                       title: '新着メッセージ',
                       body: '画像を送信しました。',
@@ -152,7 +152,7 @@ class AddMessageDialog extends StatefulWidget {
 }
 
 class _AddMessageDialogState extends State<AddMessageDialog> {
-  FmServices fmServices = FmServices();
+  FmService fmServices = FmService();
   UserMessageService messageService = UserMessageService();
   TextEditingController contentController = TextEditingController();
 

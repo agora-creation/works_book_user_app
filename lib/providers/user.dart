@@ -17,7 +17,7 @@ class UserProvider with ChangeNotifier {
   FirebaseAuth? auth;
   User? _authUser;
   User? get authUser => _authUser;
-  FmServices fmServices = FmServices();
+  FmService fmServices = FmService();
   UserService userService = UserService();
   UserModel? _user;
   UserModel? get user => _user;

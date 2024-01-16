@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/providers/user.dart';
+import 'package:works_book_user_app/services/fm.dart';
 import 'package:works_book_user_app/services/group.dart';
 import 'package:works_book_user_app/services/user.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
@@ -17,6 +18,7 @@ class GroupInApplyScreen extends StatefulWidget {
 }
 
 class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
+  FmService fmService = FmService();
   GroupService groupService = GroupService();
   UserService userService = UserService();
   GroupModel? group;
@@ -85,6 +87,15 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                                 'groupId': group?.id,
                                 'groupInApply': false,
                               });
+                              List<String> tokens = group?.tokens ?? [];
+                              for (String token in tokens) {
+                                fmService.send(
+                                  token: token,
+                                  title: '所属申請がありました',
+                                  body:
+                                      '${userProvider.user?.name}様から所属申請がありました。至急対応してください。',
+                                );
+                              }
                               await userProvider.reloadUserModel();
                               if (!mounted) return;
                               Navigator.of(context, rootNavigator: true).pop();

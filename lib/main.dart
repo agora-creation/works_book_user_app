@@ -14,7 +14,7 @@ import 'package:works_book_user_app/services/fm.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FmServices().initNotifications();
+  await FmService().initNotifications();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

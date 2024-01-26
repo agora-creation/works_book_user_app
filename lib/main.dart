@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         ],
         supportedLocales: const [Locale('ja')],
         locale: const Locale('ja'),
-        title: 'オシゴト予定帳 - スタッフ用',
+        title: 'オシゴト予定帳',
         theme: customTheme(),
         home: const SplashController(),
       ),

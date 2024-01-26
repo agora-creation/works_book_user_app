@@ -52,7 +52,7 @@ class _GroupScreenState extends State<GroupScreen> {
           const SizedBox(height: 8),
           CustomEditList(
             header: '会社・組織番号',
-            value: widget.group.number,
+            value: widget.group.code,
           ),
           CustomEditList(
             header: '会社・組織名',
@@ -60,7 +60,7 @@ class _GroupScreenState extends State<GroupScreen> {
           ),
           CustomEditList(
             header: '郵便番号',
-            value: widget.group.zipCode,
+            value: widget.group.zip,
           ),
           CustomEditList(
             header: '住所',
@@ -69,10 +69,6 @@ class _GroupScreenState extends State<GroupScreen> {
           CustomEditList(
             header: '電話番号',
             value: widget.group.tel,
-          ),
-          CustomEditList(
-            header: 'メールアドレス',
-            value: widget.group.email,
           ),
           const SizedBox(height: 16),
           Center(

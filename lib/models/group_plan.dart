@@ -5,8 +5,9 @@ import 'package:works_book_user_app/common/style.dart';
 class GroupPlanModel {
   String _id = '';
   String _groupId = '';
+  String _subgroupId = '';
   String _title = '';
-  String _details = '';
+  String _content = '';
   DateTime _startedAt = DateTime.now();
   DateTime _endedAt = DateTime.now();
   Color _color = kPlanColors.first;
@@ -15,8 +16,9 @@ class GroupPlanModel {
 
   String get id => _id;
   String get groupId => _groupId;
+  String get subgroupId => _subgroupId;
   String get title => _title;
-  String get details => _details;
+  String get content => _content;
   DateTime get startedAt => _startedAt;
   DateTime get endedAt => _endedAt;
   Color get color => _color;
@@ -27,8 +29,9 @@ class GroupPlanModel {
     Map<String, dynamic> map = snapshot.data() ?? {};
     _id = map['id'] ?? '';
     _groupId = map['groupId'] ?? '';
+    _subgroupId = map['subgroupId'] ?? '';
     _title = map['title'] ?? '';
-    _details = map['details'] ?? '';
+    _content = map['content'] ?? '';
     if (map['startedAt'] != null) {
       _startedAt = map['startedAt'].toDate() ?? DateTime.now();
     }

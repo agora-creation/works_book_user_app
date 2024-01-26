@@ -1,34 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserMessageModel {
+class GroupSubgroupModel {
   String _id = '';
   String _groupId = '';
-  String _subgroupId = '';
-  String _userId = '';
-  String _content = '';
+  String _code = '';
+  String _password = '';
+  String _name = '';
   String _image = '';
-  String _createdUserId = '';
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
   String get groupId => _groupId;
-  String get subgroupId => _subgroupId;
-  String get userId => _userId;
-  String get content => _content;
+  String get code => _code;
+  String get password => _password;
+  String get name => _name;
   String get image => _image;
-  String get createdUserId => _createdUserId;
   DateTime get createdAt => _createdAt;
 
-  UserMessageModel.fromSnapshot(
+  GroupSubgroupModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic> map = snapshot.data() ?? {};
     _id = map['id'] ?? '';
     _groupId = map['groupId'] ?? '';
-    _subgroupId = map['subgroupId'] ?? '';
-    _userId = map['userId'] ?? '';
-    _content = map['content'] ?? '';
+    _code = map['code'] ?? '';
+    _password = map['password'] ?? '';
+    _name = map['name'] ?? '';
     _image = map['image'] ?? '';
-    _createdUserId = map['createdUserId'] ?? '';
     if (map['createdAt'] != null) {
       _createdAt = map['createdAt'].toDate() ?? DateTime.now();
     }

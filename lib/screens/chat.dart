@@ -108,14 +108,14 @@ class _ChatScreenState extends State<ChatScreen> {
                     'createdUserId': widget.user?.id,
                     'createdAt': DateTime.now(),
                   });
-                  List<String> tokens = widget.group?.tokens ?? [];
-                  for (String token in tokens) {
-                    fmService.send(
-                      token: token,
-                      title: '新着メッセージ',
-                      body: '画像を送信しました。',
-                    );
-                  }
+                  // List<String> tokens = widget.group?.tokens ?? [];
+                  // for (String token in tokens) {
+                  //   fmService.send(
+                  //     token: token,
+                  //     title: '新着メッセージ',
+                  //     body: '画像を送信しました。',
+                  //   );
+                  // }
                 },
               ),
               BottomRightButton(
@@ -197,14 +197,14 @@ class _AddMessageDialogState extends State<AddMessageDialog> {
                     'createdUserId': widget.user?.id,
                     'createdAt': DateTime.now(),
                   });
-                  List<String> tokens = widget.group?.tokens ?? [];
-                  for (String token in tokens) {
-                    fmServices.send(
-                      token: token,
-                      title: '新着メッセージ',
-                      body: contentController.text,
-                    );
-                  }
+                  // List<String> tokens = widget.group?.tokens ?? [];
+                  // for (String token in tokens) {
+                  //   fmServices.send(
+                  //     token: token,
+                  //     title: '新着メッセージ',
+                  //     body: contentController.text,
+                  //   );
+                  // }
                   if (!mounted) return;
                   Navigator.pop(context);
                 },

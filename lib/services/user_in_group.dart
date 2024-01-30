@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:works_book_user_app/models/user.dart';
 
-class UserService {
-  String collection = 'user';
+class UserInGroupService {
+  String collection = 'userInGroup';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void create(Map<String, dynamic> values) {
@@ -17,17 +16,18 @@ class UserService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
-  Future<UserModel?> select({
+  Stream<DocumentSnapshot<Map<String, dynamic>>> stream({
     String? userId,
-  }) async {
-    UserModel? ret;
-    await firestore
+  }) {
+    String id = 'error';
+    if (userId != null) {
+      if (userId != '') {
+        id = userId;
+      }
+    }
+    return FirebaseFirestore.instance
         .collection(collection)
-        .doc(userId ?? 'error')
-        .get()
-        .then((value) {
-      ret = UserModel.fromSnapshot(value);
-    });
-    return ret;
+        .doc(id)
+        .snapshots();
   }
 }

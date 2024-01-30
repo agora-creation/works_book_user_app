@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/style.dart';
 
-class GroupPlanModel {
+class GroupSubgroupPlanModel {
   String _id = '';
   String _groupId = '';
   String _subgroupId = '';
@@ -25,7 +25,8 @@ class GroupPlanModel {
   bool get allDay => _allDay;
   DateTime get createdAt => _createdAt;
 
-  GroupPlanModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  GroupSubgroupPlanModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic> map = snapshot.data() ?? {};
     _id = map['id'] ?? '';
     _groupId = map['groupId'] ?? '';

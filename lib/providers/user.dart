@@ -78,13 +78,14 @@ class UserProvider with ChangeNotifier {
         'email': email,
         'password': password,
         'groupId': '',
+        'subgroupId': '',
         'token': token,
         'createdAt': DateTime.now(),
       });
     } catch (e) {
       _status = AuthStatus.unauthenticated;
       notifyListeners();
-      error = '会員登録に失敗しました';
+      error = 'アカウント登録に失敗しました';
     }
     return error;
   }
@@ -98,7 +99,9 @@ class UserProvider with ChangeNotifier {
   }
 
   Future reloadUserModel() async {
-    _user = await userService.select(_authUser?.uid);
+    _user = await userService.select(
+      userId: _authUser?.uid,
+    );
     notifyListeners();
   }
 
@@ -108,7 +111,9 @@ class UserProvider with ChangeNotifier {
     } else {
       _authUser = authUser;
       _status = AuthStatus.authenticated;
-      _user = await userService.select(_authUser?.uid);
+      _user = await userService.select(
+        userId: _authUser?.uid,
+      );
     }
     notifyListeners();
   }

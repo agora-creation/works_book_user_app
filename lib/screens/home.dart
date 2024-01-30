@@ -5,22 +5,18 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
-import 'package:works_book_user_app/models/group.dart';
+import 'package:works_book_user_app/models/user.dart';
+import 'package:works_book_user_app/models/user_in_group.dart';
 import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/providers/user.dart';
-import 'package:works_book_user_app/screens/chat.dart';
-import 'package:works_book_user_app/screens/group.dart';
 import 'package:works_book_user_app/screens/group_in_apply.dart';
-import 'package:works_book_user_app/screens/notice.dart';
 import 'package:works_book_user_app/screens/notice_details.dart';
 import 'package:works_book_user_app/screens/plan_details.dart';
-import 'package:works_book_user_app/screens/schedule.dart';
-import 'package:works_book_user_app/services/group.dart';
-import 'package:works_book_user_app/services/user.dart';
+import 'package:works_book_user_app/services/user_in_group.dart';
 import 'package:works_book_user_app/widgets/custom_circle_avatar.dart';
+import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_persistent_tab_view.dart';
-import 'package:works_book_user_app/widgets/group_in_apply_not.dart';
-import 'package:works_book_user_app/widgets/group_in_apply_wait.dart';
+import 'package:works_book_user_app/widgets/link_text.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,8 +26,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  GroupService groupService = GroupService();
-  UserService userService = UserService();
+  UserInGroupService userInGroupService = UserInGroupService();
   PersistentTabController? controller;
 
   @override
@@ -57,48 +52,53 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    UserModel? user = userProvider.user;
 
-    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: groupService.streamList(userProvider.user?.groupId),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: userInGroupService.stream(userId: user?.id),
       builder: (context, snapshot) {
-        GroupModel? group;
-        if (snapshot.hasData) {
-          for (DocumentSnapshot<Map<String, dynamic>> doc
-              in snapshot.data!.docs) {
-            group = GroupModel.fromSnapshot(doc);
-          }
+        UserInGroupModel? userInGroup;
+        if (snapshot.hasData && snapshot.requireData.exists) {
+          userInGroup = UserInGroupModel.fromSnapshot(snapshot.requireData);
         }
         Widget body = Container();
-        if (group != null) {
-          if (userProvider.user?.groupInApply == true) {
+        if (userInGroup == null || userInGroup.id == '') {
+          body = UserInGroupWidget(
+            onPressed: () => showBottomUpScreen(
+              context,
+              const GroupInApplyScreen(),
+            ),
+          );
+        } else {
+          if (!userInGroup.accept) {
+            body = UserInGroupWaitWidget(
+              userInGroup: userInGroup,
+              onTap: () async {
+                userInGroupService.delete({
+                  'id': userInGroup?.id,
+                });
+              },
+            );
+          } else {
             body = CustomPersistentTabView(
               context: context,
               controller: controller,
               screens: [
-                ScheduleScreen(
-                  group: group,
-                  showPlanDetails: _showPlanDetails,
-                ),
-                NoticeScreen(
-                  user: userProvider.user,
-                  group: group,
-                  showNoticeDetails: _showNoticeDetails,
-                ),
-                ChatScreen(
-                  user: userProvider.user,
-                  group: group,
-                ),
+                Container(),
+                Container(),
+                // ScheduleScreen(
+                //   group: group,
+                //   showPlanDetails: _showPlanDetails,
+                // ),
+                // ChatScreen(
+                //   user: userProvider.user,
+                //   group: group,
+                // ),
               ],
               items: [
                 PersistentBottomNavBarItem(
                   icon: const Icon(Icons.view_day),
                   title: 'スケジュール',
-                  activeColorPrimary: kBaseColor,
-                  inactiveColorPrimary: kGrey2Color,
-                ),
-                PersistentBottomNavBarItem(
-                  icon: const Icon(Icons.notifications),
-                  title: 'お知らせ',
                   activeColorPrimary: kBaseColor,
                   inactiveColorPrimary: kGrey2Color,
                 ),
@@ -110,46 +110,114 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             );
-          } else {
-            body = GroupInApplyWait(
-              group: group,
-              onTap: () async {
-                userService.update({
-                  'id': userProvider.user?.id,
-                  'groupId': '',
-                  'groupInApply': false,
-                });
-                await userProvider.reloadUserModel();
-              },
-            );
           }
-        } else {
-          body = GroupInApplyNot(
-            onPressed: () => showBottomUpScreen(
-              context,
-              const GroupInApplyScreen(),
-            ),
-          );
         }
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text(userProvider.user?.name ?? ''),
+            title: Text(user?.name ?? ''),
             actions: [
-              group != null && userProvider.user?.groupInApply == true
-                  ? CustomCircleAvatar(
-                      image: group.image,
-                      onTap: () => showBottomUpScreen(
-                        context,
-                        GroupScreen(group: group!),
-                      ),
-                    )
-                  : Container(),
+              CustomCircleAvatar(
+                image: '',
+                onTap: () {},
+              ),
             ],
           ),
           body: body,
         );
       },
+    );
+  }
+}
+
+class UserInGroupWidget extends StatelessWidget {
+  final Function()? onPressed;
+
+  const UserInGroupWidget({
+    this.onPressed,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Column(
+              children: [
+                Text(
+                  'あなたは会社に所属してません',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '会社への所属申請を行ってください。会社へ所属していないと、このアプリは利用できません。',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: CustomMainButton(
+                label: '会社へ所属申請を送る',
+                labelColor: kWhiteColor,
+                backgroundColor: kBaseColor,
+                onPressed: onPressed,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UserInGroupWaitWidget extends StatelessWidget {
+  final UserInGroupModel? userInGroup;
+  final Function()? onTap;
+
+  const UserInGroupWaitWidget({
+    this.userInGroup,
+    this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  '所属申請を送信しました',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '${userInGroup?.groupName}へ所属申請を送信しました。承認されるまで今しばらくお待ちください。',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            LinkText(
+              label: '所属申請を取り消す',
+              labelColor: kRedColor,
+              onTap: onTap,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

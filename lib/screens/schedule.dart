@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
-import 'package:works_book_user_app/models/group_plan.dart';
-import 'package:works_book_user_app/services/group_plan.dart';
+import 'package:works_book_user_app/models/group_subgroup_plan.dart';
+import 'package:works_book_user_app/services/group_subgroup_plan.dart';
 import 'package:works_book_user_app/widgets/custom_schedule_view.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  GroupPlanService planService = GroupPlanService();
+  GroupSubgroupPlanService planService = GroupSubgroupPlanService();
   List<Appointment> plans = [];
 
   @override
@@ -30,18 +30,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Container(
       color: kBackColor,
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: planService.streamList(widget.group?.id),
+        stream: planService.streamList(
+          groupId: widget.group?.id,
+          subgroupId: '',
+        ),
         builder: (context, snapshot) {
           plans.clear();
           if (snapshot.hasData) {
             for (DocumentSnapshot<Map<String, dynamic>> doc
                 in snapshot.data!.docs) {
-              GroupPlanModel plan = GroupPlanModel.fromSnapshot(doc);
+              GroupSubgroupPlanModel plan =
+                  GroupSubgroupPlanModel.fromSnapshot(doc);
               plans.add(Appointment(
                 startTime: plan.startedAt,
                 endTime: plan.endedAt,
                 subject: plan.title,
-                notes: plan.details,
+                notes: plan.content,
                 color: plan.color,
                 isAllDay: plan.allDay,
                 id: plan.id,

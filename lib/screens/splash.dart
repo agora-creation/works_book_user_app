@@ -29,15 +29,6 @@ class SplashScreen extends StatelessWidget {
                       letterSpacing: 4,
                     ),
                   ),
-                  const Text(
-                    '- スタッフ用 -',
-                    style: TextStyle(
-                      color: kGreyColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                    ),
-                  ),
                 ],
               ),
               const SpinKitFadingCircle(color: kBaseColor),

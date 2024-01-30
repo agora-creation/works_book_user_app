@@ -65,7 +65,7 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
                           GroupModel? tmpGroup = await groupService.select(
-                            numberController.text,
+                            groupCode: numberController.text,
                           );
                           setState(() {
                             group = tmpGroup;
@@ -87,15 +87,15 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                                 'groupId': group?.id,
                                 'groupInApply': false,
                               });
-                              List<String> tokens = group?.tokens ?? [];
-                              for (String token in tokens) {
-                                fmService.send(
-                                  token: token,
-                                  title: '所属申請がありました',
-                                  body:
-                                      '${userProvider.user?.name}様から所属申請がありました。至急対応してください。',
-                                );
-                              }
+                              // List<String> tokens = group?.tokens ?? [];
+                              // for (String token in tokens) {
+                              //   fmService.send(
+                              //     token: token,
+                              //     title: '所属申請がありました',
+                              //     body:
+                              //         '${userProvider.user?.name}様から所属申請がありました。至急対応してください。',
+                              //   );
+                              // }
                               await userProvider.reloadUserModel();
                               if (!mounted) return;
                               Navigator.of(context, rootNavigator: true).pop();

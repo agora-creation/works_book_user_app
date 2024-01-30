@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:works_book_user_app/models/group_plan.dart';
+import 'package:works_book_user_app/models/group_subgroup_plan.dart';
 
 class ScheduleDataSource extends CalendarDataSource {
-  ScheduleDataSource(List<GroupPlanModel> source) {
+  ScheduleDataSource(List<GroupSubgroupPlanModel> source) {
     appointments = source;
   }
 

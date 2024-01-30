@@ -94,7 +94,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                   if (image == null) return;
                   File imageFile = File(image.path);
-                  String id = messageService.id(widget.user!.id);
+                  String id = messageService.id(
+                    userId: widget.user!.id,
+                  );
                   FirebaseStorage storage = FirebaseStorage.instance;
                   final task = await storage
                       .ref('chat/${widget.group?.id}/${widget.user!.id}/$id')
@@ -187,7 +189,9 @@ class _AddMessageDialogState extends State<AddMessageDialog> {
                 backgroundColor: kBaseColor,
                 onPressed: () async {
                   if (contentController.text == '') return;
-                  String id = messageService.id(widget.user!.id);
+                  String id = messageService.id(
+                    userId: widget.user!.id,
+                  );
                   messageService.create({
                     'id': id,
                     'groupId': widget.group?.id,

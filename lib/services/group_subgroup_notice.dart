@@ -1,17 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserMessageService {
-  String collection = 'user';
-  String subCollection = 'message';
+class GroupSubgroupPlanService {
+  String collection = 'group';
+  String subCollection = 'subgroup';
+  String subSubCollection = 'notice';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id({
-    String? userId,
+    String? groupId,
+    String? subgroupId,
   }) {
     return firestore
         .collection(collection)
-        .doc(userId ?? 'error')
+        .doc(groupId ?? 'error')
         .collection(subCollection)
+        .doc(subgroupId ?? 'error')
+        .collection(subSubCollection)
         .doc()
         .id;
   }
@@ -19,8 +23,10 @@ class UserMessageService {
   void create(Map<String, dynamic> values) {
     firestore
         .collection(collection)
-        .doc(values['userId'])
+        .doc(values['groupId'])
         .collection(subCollection)
+        .doc(values['subgroupId'])
+        .collection(subSubCollection)
         .doc(values['id'])
         .set(values);
   }
@@ -28,8 +34,10 @@ class UserMessageService {
   void update(Map<String, dynamic> values) {
     firestore
         .collection(collection)
-        .doc(values['userId'])
+        .doc(values['groupId'])
         .collection(subCollection)
+        .doc(values['subgroupId'])
+        .collection(subSubCollection)
         .doc(values['id'])
         .update(values);
   }
@@ -37,8 +45,10 @@ class UserMessageService {
   void delete(Map<String, dynamic> values) {
     firestore
         .collection(collection)
-        .doc(values['userId'])
+        .doc(values['groupId'])
         .collection(subCollection)
+        .doc(values['subgroupId'])
+        .collection(subSubCollection)
         .doc(values['id'])
         .delete();
   }
@@ -46,14 +56,13 @@ class UserMessageService {
   Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
     String? groupId,
     String? subgroupId,
-    String? userId,
   }) {
-    return FirebaseFirestore.instance
+    return firestore
         .collection(collection)
-        .doc(userId ?? 'error')
+        .doc(groupId ?? 'error')
         .collection(subCollection)
-        .where('groupId', isEqualTo: groupId ?? 'error')
-        .where('subgroupId', isEqualTo: subgroupId ?? 'error')
+        .doc(subgroupId ?? 'error')
+        .collection(subSubCollection)
         .orderBy('createdAt', descending: true)
         .snapshots();
   }

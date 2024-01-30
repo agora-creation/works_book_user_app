@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class GroupNoticeModel {
+class GroupSubgroupNoticeModel {
   String _id = '';
   String _groupId = '';
   String _subgroupId = '';
@@ -15,7 +15,7 @@ class GroupNoticeModel {
   String get content => _content;
   DateTime get createdAt => _createdAt;
 
-  GroupNoticeModel.fromSnapshot(
+  GroupSubgroupNoticeModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic> map = snapshot.data() ?? {};
     _id = map['id'] ?? '';

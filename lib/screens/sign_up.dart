@@ -34,7 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Center(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Column(
                     children: [
@@ -51,17 +50,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           letterSpacing: 4,
                         ),
                       ),
-                      const Text(
-                        '- スタッフ用 -',
-                        style: TextStyle(
-                          color: kGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 3,
-                        ),
-                      ),
                     ],
                   ),
+                  const SizedBox(height: 40),
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -69,6 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         errorText != null
                             ? Text('$errorText', style: kErrorStyle)
                             : Container(),
+                        const SizedBox(height: 8),
                         CustomTextFormField(
                           controller: nameController,
                           textInputType: TextInputType.name,
@@ -100,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: CustomMainButton(
-                            label: '会員登録',
+                            label: 'アカウント登録',
                             labelColor: kWhiteColor,
                             backgroundColor: kBaseColor,
                             onPressed: () async {

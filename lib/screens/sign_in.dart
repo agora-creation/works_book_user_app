@@ -33,7 +33,6 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Center(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Column(
                     children: [
@@ -50,17 +49,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           letterSpacing: 4,
                         ),
                       ),
-                      const Text(
-                        '- スタッフ用 -',
-                        style: TextStyle(
-                          color: kGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 3,
-                        ),
-                      ),
                     ],
                   ),
+                  const SizedBox(height: 40),
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -68,6 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         errorText != null
                             ? Text('$errorText', style: kErrorStyle)
                             : Container(),
+                        const SizedBox(height: 8),
                         CustomTextFormField(
                           controller: emailController,
                           textInputType: TextInputType.emailAddress,
@@ -114,7 +106,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         const SizedBox(height: 16),
                         LinkText(
-                          label: '会員登録はコチラ',
+                          label: 'アカウント登録はコチラ',
                           labelColor: kBaseColor,
                           onTap: () => pushScreen(
                             context,

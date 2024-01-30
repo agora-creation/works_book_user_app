@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/style.dart';
 
-class GroupSubgroupPlanModel {
+class GroupSectionPlanModel {
   String _id = '';
   String _groupId = '';
-  String _subgroupId = '';
+  String _sectionId = '';
   String _title = '';
   String _content = '';
   DateTime _startedAt = DateTime.now();
@@ -16,7 +16,7 @@ class GroupSubgroupPlanModel {
 
   String get id => _id;
   String get groupId => _groupId;
-  String get subgroupId => _subgroupId;
+  String get sectionId => _sectionId;
   String get title => _title;
   String get content => _content;
   DateTime get startedAt => _startedAt;
@@ -25,12 +25,12 @@ class GroupSubgroupPlanModel {
   bool get allDay => _allDay;
   DateTime get createdAt => _createdAt;
 
-  GroupSubgroupPlanModel.fromSnapshot(
+  GroupSectionPlanModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic> map = snapshot.data() ?? {};
     _id = map['id'] ?? '';
     _groupId = map['groupId'] ?? '';
-    _subgroupId = map['subgroupId'] ?? '';
+    _sectionId = map['sectionId'] ?? '';
     _title = map['title'] ?? '';
     _content = map['content'] ?? '';
     if (map['startedAt'] != null) {

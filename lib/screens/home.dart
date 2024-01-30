@@ -6,13 +6,13 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user.dart';
-import 'package:works_book_user_app/models/user_in_group.dart';
+import 'package:works_book_user_app/models/user_in_apply.dart';
 import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/screens/group_in_apply.dart';
 import 'package:works_book_user_app/screens/notice_details.dart';
 import 'package:works_book_user_app/screens/plan_details.dart';
-import 'package:works_book_user_app/services/user_in_group.dart';
+import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_circle_avatar.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_persistent_tab_view.dart';
@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  UserInGroupService userInGroupService = UserInGroupService();
+  UserInApplyService userInApplyService = UserInApplyService();
   PersistentTabController? controller;
 
   @override
@@ -54,28 +54,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     UserModel? user = userProvider.user;
 
-    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      stream: userInGroupService.stream(userId: user?.id),
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: userInApplyService.streamList(userId: user?.id),
       builder: (context, snapshot) {
-        UserInGroupModel? userInGroup;
-        if (snapshot.hasData && snapshot.requireData.exists) {
-          userInGroup = UserInGroupModel.fromSnapshot(snapshot.requireData);
+        UserInApplyModel? userInApply;
+        if (snapshot.hasData) {
+          userInApply =
+              UserInApplyModel.fromSnapshot(snapshot.data!.docs.first);
         }
         Widget body = Container();
-        if (userInGroup == null || userInGroup.id == '') {
-          body = UserInGroupWidget(
+        if (userInApply == null) {
+          body = UserInApplyWidget(
             onPressed: () => showBottomUpScreen(
               context,
               const GroupInApplyScreen(),
             ),
           );
         } else {
-          if (!userInGroup.accept) {
-            body = UserInGroupWaitWidget(
-              userInGroup: userInGroup,
+          if (!userInApply.accept) {
+            body = UserInApplyWaitWidget(
+              userInApply: userInApply,
               onTap: () async {
-                userInGroupService.delete({
-                  'id': userInGroup?.id,
+                userInApplyService.delete({
+                  'id': userInApply?.id,
                 });
               },
             );
@@ -86,14 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
               screens: [
                 Container(),
                 Container(),
-                // ScheduleScreen(
-                //   group: group,
-                //   showPlanDetails: _showPlanDetails,
-                // ),
-                // ChatScreen(
-                //   user: userProvider.user,
-                //   group: group,
-                // ),
               ],
               items: [
                 PersistentBottomNavBarItem(
@@ -130,10 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class UserInGroupWidget extends StatelessWidget {
+class UserInApplyWidget extends StatelessWidget {
   final Function()? onPressed;
 
-  const UserInGroupWidget({
+  const UserInApplyWidget({
     this.onPressed,
     super.key,
   });
@@ -177,12 +170,12 @@ class UserInGroupWidget extends StatelessWidget {
   }
 }
 
-class UserInGroupWaitWidget extends StatelessWidget {
-  final UserInGroupModel? userInGroup;
+class UserInApplyWaitWidget extends StatelessWidget {
+  final UserInApplyModel? userInApply;
   final Function()? onTap;
 
-  const UserInGroupWaitWidget({
-    this.userInGroup,
+  const UserInApplyWaitWidget({
+    this.userInApply,
     this.onTap,
     super.key,
   });
@@ -205,7 +198,7 @@ class UserInGroupWaitWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${userInGroup?.groupName}へ所属申請を送信しました。承認されるまで今しばらくお待ちください。',
+                  '${userInApply?.groupName}へ所属申請を送信しました。承認されるまで今しばらくお待ちください。',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],

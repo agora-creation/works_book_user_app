@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserInGroupService {
-  String collection = 'userInGroup';
+class UserInApplyService {
+  String collection = 'userInApply';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void create(Map<String, dynamic> values) {
@@ -16,18 +16,12 @@ class UserInGroupService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> stream({
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
     String? userId,
   }) {
-    String id = 'error';
-    if (userId != null) {
-      if (userId != '') {
-        id = userId;
-      }
-    }
     return FirebaseFirestore.instance
         .collection(collection)
-        .doc(id)
+        .where('id', isEqualTo: userId ?? 'error')
         .snapshots();
   }
 }

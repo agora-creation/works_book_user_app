@@ -21,15 +21,12 @@ class GroupService {
     return ret;
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> stream({
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
     String? groupId,
   }) {
-    String id = 'error';
-    if (groupId != null) {
-      if (groupId != '') {
-        id = groupId;
-      }
-    }
-    return firestore.collection(collection).doc(id).snapshots();
+    return firestore
+        .collection(collection)
+        .where('id', isEqualTo: groupId ?? 'error')
+        .snapshots();
   }
 }

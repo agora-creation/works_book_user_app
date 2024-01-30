@@ -6,7 +6,6 @@ class GroupSubgroupModel {
   String _code = '';
   String _password = '';
   String _name = '';
-  String _image = '';
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -14,7 +13,6 @@ class GroupSubgroupModel {
   String get code => _code;
   String get password => _password;
   String get name => _name;
-  String get image => _image;
   DateTime get createdAt => _createdAt;
 
   GroupSubgroupModel.fromSnapshot(
@@ -25,7 +23,6 @@ class GroupSubgroupModel {
     _code = map['code'] ?? '';
     _password = map['password'] ?? '';
     _name = map['name'] ?? '';
-    _image = map['image'] ?? '';
     if (map['createdAt'] != null) {
       _createdAt = map['createdAt'].toDate() ?? DateTime.now();
     }

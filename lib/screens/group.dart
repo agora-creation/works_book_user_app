@@ -44,7 +44,7 @@ class _GroupScreenState extends State<GroupScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 80),
             child: ClipOval(
               child: Image.network(
-                widget.group.image,
+                '',
                 fit: BoxFit.cover,
               ),
             ),
@@ -57,18 +57,6 @@ class _GroupScreenState extends State<GroupScreen> {
           CustomEditList(
             header: '会社・組織名',
             value: widget.group.name,
-          ),
-          CustomEditList(
-            header: '郵便番号',
-            value: widget.group.zip,
-          ),
-          CustomEditList(
-            header: '住所',
-            value: widget.group.address,
-          ),
-          CustomEditList(
-            header: '電話番号',
-            value: widget.group.tel,
           ),
           const SizedBox(height: 16),
           Center(

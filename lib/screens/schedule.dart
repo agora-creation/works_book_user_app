@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
-import 'package:works_book_user_app/models/group_subgroup_plan.dart';
+import 'package:works_book_user_app/models/group_section_plan.dart';
 import 'package:works_book_user_app/services/group_subgroup_plan.dart';
 import 'package:works_book_user_app/widgets/custom_schedule_view.dart';
 
@@ -39,8 +39,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           if (snapshot.hasData) {
             for (DocumentSnapshot<Map<String, dynamic>> doc
                 in snapshot.data!.docs) {
-              GroupSubgroupPlanModel plan =
-                  GroupSubgroupPlanModel.fromSnapshot(doc);
+              GroupSectionPlanModel plan =
+                  GroupSectionPlanModel.fromSnapshot(doc);
               plans.add(Appointment(
                 startTime: plan.startedAt,
                 endTime: plan.endedAt,

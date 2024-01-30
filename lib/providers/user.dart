@@ -77,8 +77,6 @@ class UserProvider with ChangeNotifier {
         'name': name,
         'email': email,
         'password': password,
-        'groupId': '',
-        'subgroupId': '',
         'token': token,
         'createdAt': DateTime.now(),
       });

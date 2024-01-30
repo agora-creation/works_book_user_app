@@ -1,20 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class GroupSubgroupPlanService {
+class GroupSectionPlanService {
   String collection = 'group';
-  String subCollection = 'subgroup';
-  String subSubCollection = 'plan';
+  String subCollection = 'section';
+  String subSubCollection = 'notice';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id({
     String? groupId,
-    String? subgroupId,
+    String? sectionId,
   }) {
     return firestore
         .collection(collection)
         .doc(groupId ?? 'error')
         .collection(subCollection)
-        .doc(subgroupId ?? 'error')
+        .doc(sectionId ?? 'error')
         .collection(subSubCollection)
         .doc()
         .id;
@@ -25,7 +25,7 @@ class GroupSubgroupPlanService {
         .collection(collection)
         .doc(values['groupId'])
         .collection(subCollection)
-        .doc(values['subgroupId'])
+        .doc(values['sectionId'])
         .collection(subSubCollection)
         .doc(values['id'])
         .set(values);
@@ -36,7 +36,7 @@ class GroupSubgroupPlanService {
         .collection(collection)
         .doc(values['groupId'])
         .collection(subCollection)
-        .doc(values['subgroupId'])
+        .doc(values['sectionId'])
         .collection(subSubCollection)
         .doc(values['id'])
         .update(values);
@@ -47,7 +47,7 @@ class GroupSubgroupPlanService {
         .collection(collection)
         .doc(values['groupId'])
         .collection(subCollection)
-        .doc(values['subgroupId'])
+        .doc(values['sectionId'])
         .collection(subSubCollection)
         .doc(values['id'])
         .delete();

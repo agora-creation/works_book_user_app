@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
-import 'package:works_book_user_app/models/user.dart';
 import 'package:works_book_user_app/models/user_in_apply.dart';
 import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/providers/user.dart';
@@ -13,7 +12,6 @@ import 'package:works_book_user_app/screens/group_in_apply.dart';
 import 'package:works_book_user_app/screens/notice_details.dart';
 import 'package:works_book_user_app/screens/plan_details.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
-import 'package:works_book_user_app/widgets/custom_circle_avatar.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_persistent_tab_view.dart';
 import 'package:works_book_user_app/widgets/link_text.dart';
@@ -52,17 +50,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    UserModel? user = userProvider.user;
 
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: userInApplyService.streamList(userId: user?.id),
+      stream: userInApplyService.streamList(
+        userId: userProvider.user?.id,
+      ),
       builder: (context, snapshot) {
+        Widget body = Container();
         UserInApplyModel? userInApply;
         if (snapshot.hasData) {
-          userInApply =
-              UserInApplyModel.fromSnapshot(snapshot.data!.docs.first);
+          if (snapshot.data!.docs.isNotEmpty) {
+            userInApply = UserInApplyModel.fromSnapshot(
+              snapshot.data!.docs.first,
+            );
+          }
         }
-        Widget body = Container();
         if (userInApply == null) {
           body = UserInApplyWidget(
             onPressed: () => showBottomUpScreen(
@@ -70,51 +72,43 @@ class _HomeScreenState extends State<HomeScreen> {
               const GroupInApplyScreen(),
             ),
           );
+        } else if (!userInApply.accept) {
+          body = UserInApplyWaitWidget(
+            userInApply: userInApply,
+            onTap: () async {
+              userInApplyService.delete({
+                'id': userInApply?.id,
+              });
+            },
+          );
         } else {
-          if (!userInApply.accept) {
-            body = UserInApplyWaitWidget(
-              userInApply: userInApply,
-              onTap: () async {
-                userInApplyService.delete({
-                  'id': userInApply?.id,
-                });
-              },
-            );
-          } else {
-            body = CustomPersistentTabView(
-              context: context,
-              controller: controller,
-              screens: [
-                Container(),
-                Container(),
-              ],
-              items: [
-                PersistentBottomNavBarItem(
-                  icon: const Icon(Icons.view_day),
-                  title: 'スケジュール',
-                  activeColorPrimary: kBaseColor,
-                  inactiveColorPrimary: kGrey2Color,
-                ),
-                PersistentBottomNavBarItem(
-                  icon: const Icon(Icons.wechat),
-                  title: 'チャット',
-                  activeColorPrimary: kBaseColor,
-                  inactiveColorPrimary: kGrey2Color,
-                ),
-              ],
-            );
-          }
+          body = CustomPersistentTabView(
+            context: context,
+            controller: controller,
+            screens: [
+              Container(),
+              Container(),
+            ],
+            items: [
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.view_day),
+                title: 'スケジュール',
+                activeColorPrimary: kBaseColor,
+                inactiveColorPrimary: kGrey2Color,
+              ),
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.wechat),
+                title: 'チャット',
+                activeColorPrimary: kBaseColor,
+                inactiveColorPrimary: kGrey2Color,
+              ),
+            ],
+          );
         }
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text(user?.name ?? ''),
-            actions: [
-              CustomCircleAvatar(
-                image: '',
-                onTap: () {},
-              ),
-            ],
+            title: Text(userProvider.user?.name ?? ''),
           ),
           body: body,
         );

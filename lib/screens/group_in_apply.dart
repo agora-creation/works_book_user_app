@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
+import 'package:works_book_user_app/models/group_section.dart';
 import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/services/fm.dart';
 import 'package:works_book_user_app/services/group.dart';
-import 'package:works_book_user_app/services/user.dart';
+import 'package:works_book_user_app/services/group_section.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
 import 'package:works_book_user_app/widgets/group_in_apply_list.dart';
@@ -20,9 +21,10 @@ class GroupInApplyScreen extends StatefulWidget {
 class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
   FmService fmService = FmService();
   GroupService groupService = GroupService();
-  UserService userService = UserService();
+  GroupSectionService groupSectionService = GroupSectionService();
   GroupModel? group;
-  TextEditingController numberController = TextEditingController();
+  GroupSectionModel? groupSection;
+  TextEditingController codeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('会社・組織へ所属申請を送る'),
+        title: const Text('会社へ所属申請を送る'),
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
@@ -46,10 +48,10 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomTextFormField(
-                controller: numberController,
+                controller: codeController,
                 textInputType: TextInputType.number,
                 maxLines: 1,
-                label: '会社・組織番号',
+                label: '会社コード(7桁)',
                 color: kBaseColor,
                 prefix: Icons.numbers,
               ),
@@ -59,17 +61,24 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                   ? SizedBox(
                       width: double.infinity,
                       child: CustomMainButton(
-                        label: '上記番号で検索する',
+                        label: 'コードから会社を検索する',
                         labelColor: kWhiteColor,
                         backgroundColor: kBaseColor,
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
-                          GroupModel? tmpGroup = await groupService.select(
-                            groupCode: numberController.text,
-                          );
-                          setState(() {
-                            group = tmpGroup;
-                          });
+                          String code = codeController.text;
+                          String groupCode = code.substring(0, 3);
+                          String sectionCode = code.substring(3, 7);
+
+                          print(groupCode);
+                          print(sectionCode);
+
+                          // GroupModel? tmpGroup = await groupService.select(
+                          //   groupCode: codeController.text,
+                          // );
+                          // setState(() {
+                          //   group = tmpGroup;
+                          // });
                         },
                       ),
                     )
@@ -82,11 +91,11 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                             labelColor: kWhiteColor,
                             backgroundColor: kBaseColor,
                             onPressed: () async {
-                              userService.update({
-                                'id': userProvider.user?.id,
-                                'groupId': group?.id,
-                                'groupInApply': false,
-                              });
+                              // userService.update({
+                              //   'id': userProvider.user?.id,
+                              //   'groupId': group?.id,
+                              //   'groupInApply': false,
+                              // });
                               // List<String> tokens = group?.tokens ?? [];
                               // for (String token in tokens) {
                               //   fmService.send(
@@ -112,7 +121,7 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                             onPressed: () {
                               setState(() {
                                 group = null;
-                                numberController.clear();
+                                codeController.clear();
                               });
                             },
                           ),

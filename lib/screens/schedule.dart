@@ -4,7 +4,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/models/group_section_plan.dart';
-import 'package:works_book_user_app/services/group_subgroup_plan.dart';
+import 'package:works_book_user_app/services/group_section_plan.dart';
 import 'package:works_book_user_app/widgets/custom_schedule_view.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  GroupSubgroupPlanService planService = GroupSubgroupPlanService();
+  GroupSectionPlanService planService = GroupSectionPlanService();
   List<Appointment> plans = [];
 
   @override
@@ -32,7 +32,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: planService.streamList(
           groupId: widget.group?.id,
-          subgroupId: '',
+          sectionId: '',
         ),
         builder: (context, snapshot) {
           plans.clear();

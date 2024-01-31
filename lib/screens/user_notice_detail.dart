@@ -4,25 +4,26 @@ import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/services/user_notice.dart';
 
-class NoticeDetailsScreen extends StatefulWidget {
-  final UserNoticeModel notice;
+class UserNoticeDetailScreen extends StatefulWidget {
+  final UserNoticeModel userNotice;
 
-  const NoticeDetailsScreen({
-    required this.notice,
+  const UserNoticeDetailScreen({
+    required this.userNotice,
     super.key,
   });
 
   @override
-  State<NoticeDetailsScreen> createState() => _NoticeDetailsScreenState();
+  State<UserNoticeDetailScreen> createState() => _UserNoticeDetailScreenState();
 }
 
-class _NoticeDetailsScreenState extends State<NoticeDetailsScreen> {
-  UserNoticeService noticeService = UserNoticeService();
+class _UserNoticeDetailScreenState extends State<UserNoticeDetailScreen> {
+  UserNoticeService userNoticeService = UserNoticeService();
 
   void _init() {
-    noticeService.update({
-      'id': widget.notice.id,
-      'userId': widget.notice.userId,
+    if (widget.userNotice.isRead) return;
+    userNoticeService.update({
+      'id': widget.userNotice.id,
+      'userId': widget.userNotice.userId,
       'isRead': true,
     });
   }
@@ -36,20 +37,13 @@ class _NoticeDetailsScreenState extends State<NoticeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackColor,
       appBar: AppBar(
-        backgroundColor: kBackColor,
-        automaticallyImplyLeading: false,
-        title: Text(
-          widget.notice.title,
-          style: const TextStyle(color: kBlackColor),
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: kBlackColor),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
+        centerTitle: true,
+        title: Text(widget.userNotice.title),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -57,14 +51,17 @@ class _NoticeDetailsScreenState extends State<NoticeDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.notice.content,
-              style: const TextStyle(color: kBlackColor),
+              widget.userNotice.content,
+              style: const TextStyle(
+                color: kBlackColor,
+                fontSize: 16,
+              ),
             ),
-            const Divider(color: kGreyColor),
+            const SizedBox(height: 8),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                dateText('yyyy/MM/dd HH:ss', widget.notice.createdAt),
+                dateText('yyyy/MM/dd HH:ss', widget.userNotice.createdAt),
                 style: const TextStyle(
                   color: kGrey2Color,
                   fontSize: 14,

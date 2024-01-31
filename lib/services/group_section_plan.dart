@@ -54,8 +54,8 @@ class GroupSectionPlanService {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
-    String? groupId,
-    String? sectionId,
+    required String? groupId,
+    required String? sectionId,
   }) {
     return firestore
         .collection(collection)

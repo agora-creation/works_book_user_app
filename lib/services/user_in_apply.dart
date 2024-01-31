@@ -17,7 +17,7 @@ class UserInApplyService {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
-    String? userId,
+    required String? userId,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)

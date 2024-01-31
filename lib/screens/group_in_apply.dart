@@ -7,9 +7,10 @@ import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/services/fm.dart';
 import 'package:works_book_user_app/services/group.dart';
 import 'package:works_book_user_app/services/group_section.dart';
+import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
-import 'package:works_book_user_app/widgets/group_in_apply_list.dart';
+import 'package:works_book_user_app/widgets/group_section_list.dart';
 
 class GroupInApplyScreen extends StatefulWidget {
   const GroupInApplyScreen({super.key});
@@ -22,9 +23,11 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
   FmService fmService = FmService();
   GroupService groupService = GroupService();
   GroupSectionService groupSectionService = GroupSectionService();
+  UserInApplyService userInApplyService = UserInApplyService();
   GroupModel? group;
   GroupSectionModel? groupSection;
   TextEditingController codeController = TextEditingController();
+  String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +50,10 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              errorText != null
+                  ? Text('$errorText', style: kErrorStyle)
+                  : Container(),
+              const SizedBox(height: 8),
               CustomTextFormField(
                 controller: codeController,
                 textInputType: TextInputType.number,
@@ -55,7 +62,12 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                 color: kBaseColor,
                 prefix: Icons.numbers,
               ),
-              group == null ? Container() : GroupInApplyList(group: group),
+              group == null
+                  ? Container()
+                  : GroupSectionList(
+                      group: group,
+                      groupSection: groupSection,
+                    ),
               const SizedBox(height: 8),
               group == null
                   ? SizedBox(
@@ -67,18 +79,38 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
                           String code = codeController.text;
+                          if (code.length != 7) {
+                            setState(() {
+                              errorText = '必ず7桁で入力してください';
+                            });
+                            return;
+                          }
                           String groupCode = code.substring(0, 3);
                           String sectionCode = code.substring(3, 7);
-
-                          print(groupCode);
-                          print(sectionCode);
-
-                          // GroupModel? tmpGroup = await groupService.select(
-                          //   groupCode: codeController.text,
-                          // );
-                          // setState(() {
-                          //   group = tmpGroup;
-                          // });
+                          GroupModel? tmpGroup = await groupService.select(
+                            groupCode: groupCode,
+                          );
+                          if (tmpGroup == null) {
+                            setState(() {
+                              errorText = '会社が見つかりませんでした';
+                            });
+                            return;
+                          }
+                          GroupSectionModel? tmpGroupSection =
+                              await groupSectionService.select(
+                            groupId: tmpGroup.id,
+                            sectionCode: sectionCode,
+                          );
+                          if (tmpGroupSection == null) {
+                            setState(() {
+                              errorText = '会社が見つかりませんでした';
+                            });
+                            return;
+                          }
+                          setState(() {
+                            group = tmpGroup;
+                            groupSection = tmpGroupSection;
+                          });
                         },
                       ),
                     )
@@ -91,11 +123,18 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                             labelColor: kWhiteColor,
                             backgroundColor: kBaseColor,
                             onPressed: () async {
-                              // userService.update({
-                              //   'id': userProvider.user?.id,
-                              //   'groupId': group?.id,
-                              //   'groupInApply': false,
-                              // });
+                              userInApplyService.create({
+                                'id': userProvider.user?.id,
+                                'groupId': group?.id,
+                                'groupName': group?.name,
+                                'sectionId': groupSection?.id,
+                                'sectionName': groupSection?.name,
+                                'userId': userProvider.user?.id,
+                                'userName': userProvider.user?.name,
+                                'accept': false,
+                                'admin': false,
+                                'createdAt': DateTime.now(),
+                              });
                               // List<String> tokens = group?.tokens ?? [];
                               // for (String token in tokens) {
                               //   fmService.send(
@@ -105,7 +144,6 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                               //         '${userProvider.user?.name}様から所属申請がありました。至急対応してください。',
                               //   );
                               // }
-                              await userProvider.reloadUserModel();
                               if (!mounted) return;
                               Navigator.of(context, rootNavigator: true).pop();
                             },
@@ -115,12 +153,13 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: CustomMainButton(
-                            label: 'キャンセル',
+                            label: 'コード入力に戻る',
                             labelColor: kWhiteColor,
                             backgroundColor: kGreyColor,
                             onPressed: () {
                               setState(() {
                                 group = null;
+                                groupSection = null;
                                 codeController.clear();
                               });
                             },

@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user_in_apply.dart';
-import 'package:works_book_user_app/models/user_notice.dart';
 import 'package:works_book_user_app/providers/user.dart';
+import 'package:works_book_user_app/screens/chat.dart';
 import 'package:works_book_user_app/screens/group_in_apply.dart';
-import 'package:works_book_user_app/screens/notice_details.dart';
-import 'package:works_book_user_app/screens/plan_details.dart';
+import 'package:works_book_user_app/screens/group_setting.dart';
+import 'package:works_book_user_app/screens/schedule.dart';
+import 'package:works_book_user_app/screens/user_notice.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_persistent_tab_view.dart';
@@ -33,20 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
     controller = PersistentTabController(initialIndex: 0);
   }
 
-  void _showPlanDetails(Appointment plan) {
-    showBottomUpScreen(
-      context,
-      PlanDetailsScreen(plan: plan),
-    );
-  }
-
-  void _showNoticeDetails(UserNoticeModel notice) {
-    showBottomUpScreen(
-      context,
-      NoticeDetailsScreen(notice: notice),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -58,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, snapshot) {
         Widget body = Container();
         UserInApplyModel? userInApply;
+        String circleText = '';
         if (snapshot.hasData) {
           if (snapshot.data!.docs.isNotEmpty) {
             userInApply = UserInApplyModel.fromSnapshot(
@@ -82,12 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         } else {
+          circleText = userInApply.groupName.substring(0, 1);
           body = CustomPersistentTabView(
             context: context,
             controller: controller,
             screens: [
-              Container(),
-              Container(),
+              ScheduleScreen(userInApply: userInApply),
+              ChatScreen(userInApply: userInApply),
             ],
             items: [
               PersistentBottomNavBarItem(
@@ -109,6 +97,33 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text(userProvider.user?.name ?? ''),
+            actions: userInApply != null
+                ? [
+                    IconButton(
+                      onPressed: () => showBottomUpScreen(
+                        context,
+                        UserNoticeScreen(userInApply: userInApply!),
+                      ),
+                      icon: const Icon(Icons.notifications),
+                    ),
+                    GestureDetector(
+                      onTap: () => showBottomUpScreen(
+                        context,
+                        GroupSettingScreen(userInApply: userInApply!),
+                      ),
+                      child: SizedBox(
+                        width: 58,
+                        child: CircleAvatar(
+                          backgroundColor: kBaseColor,
+                          child: Text(
+                            circleText,
+                            style: const TextStyle(color: kWhiteColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]
+                : null,
           ),
           body: body,
         );
@@ -192,7 +207,7 @@ class UserInApplyWaitWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${userInApply?.groupName}へ所属申請を送信しました。承認されるまで今しばらくお待ちください。',
+                  '${userInApply?.groupName} (${userInApply?.sectionName})へ所属申請を送信しました。承認されるまで今しばらくお待ちください。',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],

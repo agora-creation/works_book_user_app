@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
+import 'package:works_book_user_app/models/group_section.dart';
 
-class GroupInApplyList extends StatelessWidget {
+class GroupSectionList extends StatelessWidget {
   final GroupModel? group;
+  final GroupSectionModel? groupSection;
 
-  const GroupInApplyList({
-    required this.group,
+  const GroupSectionList({
+    this.group,
+    this.groupSection,
     super.key,
   });
 
@@ -23,14 +26,14 @@ class GroupInApplyList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              '会社・組織名',
+              '会社名',
               style: TextStyle(
                 color: kGrey2Color,
                 fontSize: 12,
               ),
             ),
             Text(
-              group?.name ?? '',
+              '${group?.name} (${groupSection?.name})',
               style: const TextStyle(
                 color: kBlackColor,
                 fontSize: 16,

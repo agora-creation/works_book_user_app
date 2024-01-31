@@ -24,16 +24,16 @@ class UserNoticeService {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
-    String? groupId,
-    String? subgroupId,
-    String? userId,
+    required String? groupId,
+    required String? sectionId,
+    required String? userId,
   }) {
     return firestore
         .collection(collection)
         .doc(userId ?? 'error')
         .collection(subCollection)
         .where('groupId', isEqualTo: groupId ?? 'error')
-        .where('subgroupId', isEqualTo: subgroupId ?? 'error')
+        .where('sectionId', isEqualTo: sectionId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
   }

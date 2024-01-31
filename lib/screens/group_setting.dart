@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user_in_apply.dart';
+import 'package:works_book_user_app/screens/home.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_sub_button.dart';
 import 'package:works_book_user_app/widgets/group_setting_list.dart';
@@ -35,9 +37,6 @@ class _GroupSettingScreenState extends State<GroupSettingScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          widget.userInApply.admin
-              ? const Text('あなたはこの会社の管理者です', style: kErrorStyle)
-              : Container(),
           GroupSettingList(
             header: '会社コード',
             value:
@@ -127,16 +126,8 @@ class _GroupOutDialogState extends State<GroupOutDialog> {
                   userInApplyService.delete({
                     'id': widget.userInApply.id,
                   });
-                  // List<String> tokens = widget.group?.tokens ?? [];
-                  // for (String token in tokens) {
-                  //   fmServices.send(
-                  //     token: token,
-                  //     title: '新着メッセージ',
-                  //     body: contentController.text,
-                  //   );
-                  // }
                   if (!mounted) return;
-                  Navigator.pop(context);
+                  pushReplacementScreen(context, const HomeScreen());
                 },
               ),
             ],

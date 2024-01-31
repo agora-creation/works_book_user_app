@@ -72,6 +72,7 @@ class MessageList extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text('相手の名前'),
             message.image == ''
                 ? Material(
                     elevation: 4,

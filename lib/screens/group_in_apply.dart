@@ -7,6 +7,7 @@ import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/services/fm.dart';
 import 'package:works_book_user_app/services/group.dart';
 import 'package:works_book_user_app/services/group_section.dart';
+import 'package:works_book_user_app/services/user.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
@@ -23,6 +24,7 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
   FmService fmService = FmService();
   GroupService groupService = GroupService();
   GroupSectionService groupSectionService = GroupSectionService();
+  UserService userService = UserService();
   UserInApplyService userInApplyService = UserInApplyService();
   GroupModel? group;
   GroupSectionModel? groupSection;
@@ -135,15 +137,13 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
                                 'admin': false,
                                 'createdAt': DateTime.now(),
                               });
-                              // List<String> tokens = group?.tokens ?? [];
-                              // for (String token in tokens) {
-                              //   fmService.send(
-                              //     token: token,
-                              //     title: '所属申請がありました',
-                              //     body:
-                              //         '${userProvider.user?.name}様から所属申請がありました。至急対応してください。',
-                              //   );
-                              // }
+                              fmService.sendToAdmin(
+                                groupId: group?.id,
+                                sectionId: groupSection?.id,
+                                title: '${userProvider.user?.name}から所属申請がありました',
+                                body:
+                                    '${userProvider.user?.name}から所属申請がありました。アプリを開いて確認してください。',
+                              );
                               if (!mounted) return;
                               Navigator.of(context, rootNavigator: true).pop();
                             },

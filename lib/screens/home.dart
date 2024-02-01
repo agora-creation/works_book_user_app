@@ -73,24 +73,51 @@ class _HomeScreenState extends State<HomeScreen> {
           body = CustomPersistentTabView(
             context: context,
             controller: controller,
-            screens: [
-              ScheduleScreen(userInApply: userInApply),
-              ChatScreen(userInApply: userInApply),
-            ],
-            items: [
-              PersistentBottomNavBarItem(
-                icon: const Icon(Icons.view_day),
-                title: 'スケジュール',
-                activeColorPrimary: kBaseColor,
-                inactiveColorPrimary: kGrey2Color,
-              ),
-              PersistentBottomNavBarItem(
-                icon: const Icon(Icons.wechat),
-                title: 'チャット',
-                activeColorPrimary: kBaseColor,
-                inactiveColorPrimary: kGrey2Color,
-              ),
-            ],
+            screens: userInApply.admin
+                ? [
+                    ScheduleScreen(userInApply: userInApply),
+                    ChatScreen(userInApply: userInApply),
+                    Container(),
+                  ]
+                : [
+                    ScheduleScreen(userInApply: userInApply),
+                    ChatScreen(userInApply: userInApply),
+                  ],
+            items: userInApply.admin
+                ? [
+                    PersistentBottomNavBarItem(
+                      icon: const Icon(Icons.view_day),
+                      title: 'スケジュール',
+                      activeColorPrimary: kBaseColor,
+                      inactiveColorPrimary: kGrey2Color,
+                    ),
+                    PersistentBottomNavBarItem(
+                      icon: const Icon(Icons.wechat),
+                      title: 'チャット',
+                      activeColorPrimary: kBaseColor,
+                      inactiveColorPrimary: kGrey2Color,
+                    ),
+                    PersistentBottomNavBarItem(
+                      icon: const Icon(Icons.supervisor_account),
+                      title: 'スタッフ',
+                      activeColorPrimary: kBaseColor,
+                      inactiveColorPrimary: kGrey2Color,
+                    ),
+                  ]
+                : [
+                    PersistentBottomNavBarItem(
+                      icon: const Icon(Icons.view_day),
+                      title: 'スケジュール',
+                      activeColorPrimary: kBaseColor,
+                      inactiveColorPrimary: kGrey2Color,
+                    ),
+                    PersistentBottomNavBarItem(
+                      icon: const Icon(Icons.wechat),
+                      title: 'チャット',
+                      activeColorPrimary: kBaseColor,
+                      inactiveColorPrimary: kGrey2Color,
+                    ),
+                  ],
           );
         }
         return Scaffold(
@@ -99,13 +126,18 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text(userProvider.user?.name ?? ''),
             actions: userInApply != null
                 ? [
-                    IconButton(
-                      onPressed: () => showBottomUpScreen(
-                        context,
-                        UserNoticeScreen(userInApply: userInApply!),
-                      ),
-                      icon: const Icon(Icons.notifications),
-                    ),
+                    userInApply.admin
+                        ? IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.edit_notifications),
+                          )
+                        : IconButton(
+                            onPressed: () => showBottomUpScreen(
+                              context,
+                              UserNoticeScreen(userInApply: userInApply!),
+                            ),
+                            icon: const Icon(Icons.notifications),
+                          ),
                     GestureDetector(
                       onTap: () => showBottomUpScreen(
                         context,

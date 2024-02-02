@@ -4,8 +4,8 @@ import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user_in_apply.dart';
 import 'package:works_book_user_app/screens/home.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
+import 'package:works_book_user_app/widgets/custom_setting_list.dart';
 import 'package:works_book_user_app/widgets/custom_sub_button.dart';
-import 'package:works_book_user_app/widgets/group_setting_list.dart';
 import 'package:works_book_user_app/widgets/link_text.dart';
 
 class GroupSettingScreen extends StatefulWidget {
@@ -37,12 +37,21 @@ class _GroupSettingScreenState extends State<GroupSettingScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          GroupSettingList(
+          widget.userInApply.admin
+              ? Container(
+                  color: kRedColor,
+                  child: const Text(
+                    'あなたはこの会社の管理者です',
+                    style: TextStyle(color: kWhiteColor),
+                  ),
+                )
+              : Container(),
+          CustomSettingList(
             header: '会社コード',
             value:
                 '${widget.userInApply.groupId}${widget.userInApply.sectionId}',
           ),
-          GroupSettingList(
+          CustomSettingList(
             header: '会社名',
             value:
                 '${widget.userInApply.groupName} (${widget.userInApply.sectionName})',

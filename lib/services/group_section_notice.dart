@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class GroupSectionPlanService {
+class GroupSectionNoticeService {
   String collection = 'group';
   String subCollection = 'section';
   String subSubCollection = 'notice';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id({
-    String? groupId,
-    String? sectionId,
+    required String? groupId,
+    required String? sectionId,
   }) {
     return firestore
         .collection(collection)
@@ -55,13 +55,13 @@ class GroupSectionPlanService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
     String? groupId,
-    String? subgroupId,
+    String? sectionId,
   }) {
     return firestore
         .collection(collection)
         .doc(groupId ?? 'error')
         .collection(subCollection)
-        .doc(subgroupId ?? 'error')
+        .doc(sectionId ?? 'error')
         .collection(subSubCollection)
         .orderBy('createdAt', descending: true)
         .snapshots();

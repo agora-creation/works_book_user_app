@@ -3,11 +3,11 @@ import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/group.dart';
 import 'package:works_book_user_app/models/group_section.dart';
 
-class GroupSectionList extends StatelessWidget {
+class GroupList extends StatelessWidget {
   final GroupModel? group;
   final GroupSectionModel? groupSection;
 
-  const GroupSectionList({
+  const GroupList({
     this.group,
     this.groupSection,
     super.key,

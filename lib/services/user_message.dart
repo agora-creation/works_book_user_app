@@ -6,7 +6,7 @@ class UserMessageService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id({
-    String? userId,
+    required String? userId,
   }) {
     return firestore
         .collection(collection)

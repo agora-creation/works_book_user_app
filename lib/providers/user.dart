@@ -88,6 +88,56 @@ class UserProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> updateName({
+    required String name,
+  }) async {
+    String? error;
+    if (name == '') return 'お名前を入力してください';
+    try {
+      userService.update({
+        'id': _authUser?.uid,
+        'name': name,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> updateEmail({
+    required String email,
+  }) async {
+    String? error;
+    if (email == '') return 'メールアドレスを入力してください';
+    try {
+      await auth?.currentUser?.updateEmail(email);
+      userService.update({
+        'id': _authUser?.uid,
+        'email': email,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> updatePassword({
+    required String password,
+  }) async {
+    String? error;
+    if (password == '') return 'パスワードを入力してください';
+    try {
+      await auth?.currentUser?.updatePassword(password);
+      userService.update({
+        'id': _authUser?.uid,
+        'password': password,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
   Future signOut() async {
     await auth?.signOut();
     _status = AuthStatus.unauthenticated;

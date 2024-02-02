@@ -11,7 +11,7 @@ import 'package:works_book_user_app/services/user.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_text_form_field.dart';
-import 'package:works_book_user_app/widgets/group_section_list.dart';
+import 'package:works_book_user_app/widgets/group_list.dart';
 
 class GroupInApplyScreen extends StatefulWidget {
   const GroupInApplyScreen({super.key});
@@ -66,7 +66,7 @@ class _GroupInApplyScreenState extends State<GroupInApplyScreen> {
               ),
               group == null
                   ? Container()
-                  : GroupSectionList(
+                  : GroupList(
                       group: group,
                       groupSection: groupSection,
                     ),

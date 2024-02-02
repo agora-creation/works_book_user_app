@@ -8,9 +8,11 @@ import 'package:works_book_user_app/models/user_in_apply.dart';
 import 'package:works_book_user_app/providers/user.dart';
 import 'package:works_book_user_app/screens/chat.dart';
 import 'package:works_book_user_app/screens/group_in_apply.dart';
+import 'package:works_book_user_app/screens/group_notice.dart';
 import 'package:works_book_user_app/screens/group_setting.dart';
 import 'package:works_book_user_app/screens/schedule.dart';
 import 'package:works_book_user_app/screens/user_notice.dart';
+import 'package:works_book_user_app/screens/user_setting.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_persistent_tab_view.dart';
@@ -76,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
             screens: userInApply.admin
                 ? [
                     ScheduleScreen(userInApply: userInApply),
-                    ChatScreen(userInApply: userInApply),
-                    Container(),
+                    Container(color: kBackColor),
+                    Container(color: kBackColor),
                   ]
                 : [
                     ScheduleScreen(userInApply: userInApply),
@@ -123,12 +125,21 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text(userProvider.user?.name ?? ''),
+            title: GestureDetector(
+              onTap: () => showBottomUpScreen(
+                context,
+                const UserSettingScreen(),
+              ),
+              child: Text(userProvider.user?.name ?? ''),
+            ),
             actions: userInApply != null
                 ? [
                     userInApply.admin
                         ? IconButton(
-                            onPressed: () {},
+                            onPressed: () => showBottomUpScreen(
+                              context,
+                              GroupNoticeScreen(userInApply: userInApply!),
+                            ),
                             icon: const Icon(Icons.edit_notifications),
                           )
                         : IconButton(

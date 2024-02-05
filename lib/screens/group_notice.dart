@@ -39,7 +39,7 @@ class _GroupNoticeScreenState extends State<GroupNoticeScreen> {
         shape: const Border(bottom: BorderSide(color: kGrey2Color)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: groupSectionNoticeService.streamList(
+        stream: groupSectionNoticeService.streamGroupSectionId(
           groupId: widget.userInApply.groupId,
           sectionId: widget.userInApply.sectionId,
         ),

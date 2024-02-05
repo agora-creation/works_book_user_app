@@ -70,18 +70,16 @@ class _GroupSettingScreenState extends State<GroupSettingScreen> {
                   ),
                 ),
               ),
-              !widget.userInApply.admin
-                  ? LinkText(
-                      label: '管理者になる',
-                      labelColor: kBlueColor,
-                      onTap: () => showDialog(
-                        context: context,
-                        builder: (context) => GroupAdminDialog(
-                          userInApply: widget.userInApply,
-                        ),
-                      ),
-                    )
-                  : Container(),
+              LinkText(
+                label: widget.userInApply.admin ? '管理者をやめる' : '管理者になる',
+                labelColor: kBlueColor,
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (context) => GroupAdminDialog(
+                    userInApply: widget.userInApply,
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 100),
@@ -167,9 +165,11 @@ class _GroupAdminDialogState extends State<GroupAdminDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '現在所属している会社の管理者になります。アプリの機能が管理者向けの内容に変更されますが、よろしいでしょうか？',
-            style: TextStyle(color: kBlackColor),
+          Text(
+            widget.userInApply.admin
+                ? '管理者をやめます。よろしいですか？'
+                : '現在所属している会社の管理者になるます。よろしいですか？',
+            style: const TextStyle(color: kBlackColor),
           ),
           const SizedBox(height: 16),
           Row(
@@ -179,6 +179,12 @@ class _GroupAdminDialogState extends State<GroupAdminDialog> {
                 label: 'いいえ',
                 labelColor: kWhiteColor,
                 backgroundColor: kGreyColor,
+                onPressed: () => Navigator.pop(context),
+              ),
+              CustomSubButton(
+                label: 'はい',
+                labelColor: kWhiteColor,
+                backgroundColor: kBlueColor,
                 onPressed: () => Navigator.pop(context),
               ),
             ],

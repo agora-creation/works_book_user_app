@@ -23,7 +23,7 @@ class UserNoticeService {
         .update(values);
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamUserId({
     required String? groupId,
     required String? sectionId,
     required String? userId,

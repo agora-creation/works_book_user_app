@@ -2,18 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
 import 'package:works_book_user_app/models/user_in_apply.dart';
 import 'package:works_book_user_app/providers/user.dart';
-import 'package:works_book_user_app/screens/chat.dart';
+import 'package:works_book_user_app/screens/group_chat.dart';
+import 'package:works_book_user_app/screens/group_chat_select.dart';
 import 'package:works_book_user_app/screens/group_in_apply.dart';
 import 'package:works_book_user_app/screens/group_notice.dart';
 import 'package:works_book_user_app/screens/group_setting.dart';
+import 'package:works_book_user_app/screens/plan_add.dart';
+import 'package:works_book_user_app/screens/plan_details.dart';
 import 'package:works_book_user_app/screens/schedule.dart';
+import 'package:works_book_user_app/screens/user.dart';
+import 'package:works_book_user_app/screens/user_chat.dart';
 import 'package:works_book_user_app/screens/user_notice.dart';
 import 'package:works_book_user_app/screens/user_setting.dart';
 import 'package:works_book_user_app/services/user_in_apply.dart';
+import 'package:works_book_user_app/widgets/custom_circle_avatar.dart';
 import 'package:works_book_user_app/widgets/custom_main_button.dart';
 import 'package:works_book_user_app/widgets/custom_persistent_tab_view.dart';
 import 'package:works_book_user_app/widgets/link_text.dart';
@@ -29,6 +36,27 @@ class _HomeScreenState extends State<HomeScreen> {
   UserInApplyService userInApplyService = UserInApplyService();
   PersistentTabController? controller;
 
+  void _showPlanAdd(UserInApplyModel userInApply) {
+    showBottomUpScreen(
+      context,
+      PlanAddScreen(userInApply: userInApply),
+    );
+  }
+
+  void _showPlanDetail(UserInApplyModel userInApply, Appointment plan) {
+    showBottomUpScreen(
+      context,
+      PlanDetailsScreen(userInApply: userInApply, plan: plan),
+    );
+  }
+
+  void _showGroupChat(UserInApplyModel userInApply) {
+    pushScreen(
+      context,
+      GroupChatScreen(userInApply: userInApply),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,13 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context);
 
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: userInApplyService.streamList(
+      stream: userInApplyService.streamId(
         userId: userProvider.user?.id,
       ),
       builder: (context, snapshot) {
         Widget body = Container();
         UserInApplyModel? userInApply;
-        String circleText = '';
         if (snapshot.hasData) {
           if (snapshot.data!.docs.isNotEmpty) {
             userInApply = UserInApplyModel.fromSnapshot(
@@ -71,19 +98,33 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         } else {
-          circleText = userInApply.groupName.substring(0, 1);
           body = CustomPersistentTabView(
             context: context,
             controller: controller,
             screens: userInApply.admin
                 ? [
-                    ScheduleScreen(userInApply: userInApply),
-                    Container(color: kBackColor),
-                    Container(color: kBackColor),
+                    ScheduleScreen(
+                      userInApply: userInApply,
+                      showPlanAdd: _showPlanAdd,
+                      showPlanDetail: _showPlanDetail,
+                    ),
+                    GroupChatSelectScreen(
+                      userInApply: userInApply,
+                      showGroupChat: _showGroupChat,
+                    ),
+                    UserScreen(
+                      userInApply: userInApply,
+                    ),
                   ]
                 : [
-                    ScheduleScreen(userInApply: userInApply),
-                    ChatScreen(userInApply: userInApply),
+                    ScheduleScreen(
+                      userInApply: userInApply,
+                      showPlanAdd: _showPlanAdd,
+                      showPlanDetail: _showPlanDetail,
+                    ),
+                    UserChatScreen(
+                      userInApply: userInApply,
+                    ),
                   ],
             items: userInApply.admin
                 ? [
@@ -149,20 +190,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             icon: const Icon(Icons.notifications),
                           ),
-                    GestureDetector(
+                    CustomCircleAvatar(
+                      userInApply: userInApply,
                       onTap: () => showBottomUpScreen(
                         context,
                         GroupSettingScreen(userInApply: userInApply!),
-                      ),
-                      child: SizedBox(
-                        width: 58,
-                        child: CircleAvatar(
-                          backgroundColor: kBaseColor,
-                          child: Text(
-                            circleText,
-                            style: const TextStyle(color: kWhiteColor),
-                          ),
-                        ),
                       ),
                     ),
                   ]

@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:works_book_user_app/common/functions.dart';
 import 'package:works_book_user_app/common/style.dart';
+import 'package:works_book_user_app/models/user_in_apply.dart';
+import 'package:works_book_user_app/services/group_section_plan.dart';
+import 'package:works_book_user_app/widgets/custom_sub_button.dart';
 
 class PlanDetailsScreen extends StatefulWidget {
+  final UserInApplyModel userInApply;
   final Appointment plan;
 
   const PlanDetailsScreen({
+    required this.userInApply,
     required this.plan,
     super.key,
   });
@@ -16,6 +21,8 @@ class PlanDetailsScreen extends StatefulWidget {
 }
 
 class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
+  GroupSectionPlanService planService = GroupSectionPlanService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +37,7 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.close, color: kWhiteColor),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
       ),
@@ -61,6 +68,22 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
                       fontSize: 14,
                     ),
                   ),
+            const SizedBox(height: 24),
+            widget.userInApply.admin
+                ? CustomSubButton(
+                    label: 'この予定を削除する',
+                    labelColor: widget.plan.color,
+                    backgroundColor: kWhiteColor,
+                    onPressed: () async {
+                      planService.delete({
+                        'id': widget.plan.id,
+                        'groupId': widget.userInApply.groupId,
+                        'sectionId': widget.userInApply.sectionId,
+                      });
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                  )
+                : Container(),
           ],
         ),
       ),

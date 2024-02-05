@@ -42,7 +42,7 @@ class _UserNoticeScreenState extends State<UserNoticeScreen> {
         shape: const Border(bottom: BorderSide(color: kGrey2Color)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: userNoticeService.streamList(
+        stream: userNoticeService.streamUserId(
           groupId: widget.userInApply.groupId,
           sectionId: widget.userInApply.sectionId,
           userId: userProvider.user?.id,

@@ -21,7 +21,7 @@ class GroupService {
     return ret;
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamId({
     String? groupId,
   }) {
     return firestore

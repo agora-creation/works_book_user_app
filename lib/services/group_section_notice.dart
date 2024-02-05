@@ -53,7 +53,7 @@ class GroupSectionNoticeService {
         .delete();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamGroupSectionId({
     String? groupId,
     String? sectionId,
   }) {

@@ -104,3 +104,23 @@ String rndText(int length) {
   );
   return String.fromCharCodes(codeUnits);
 }
+
+DateTime rebuildDate(DateTime? date, DateTime? time) {
+  DateTime ret = DateTime.now();
+  if (date != null && time != null) {
+    String tmpDate = dateText('yyyy-MM-dd', date);
+    String tmpTime = '${dateText('HH:mm', time)}:00.000';
+    ret = DateTime.parse('$tmpDate $tmpTime');
+  }
+  return ret;
+}
+
+DateTime rebuildTime(BuildContext context, DateTime? date, String? time) {
+  DateTime ret = DateTime.now();
+  if (date != null && time != null) {
+    String tmpDate = dateText('yyyy-MM-dd', date);
+    String tmpTime = '${time.padLeft(5, '0')}:00.000';
+    ret = DateTime.parse('$tmpDate $tmpTime');
+  }
+  return ret;
+}

@@ -14,19 +14,19 @@ import 'package:works_book_user_app/services/user_message.dart';
 import 'package:works_book_user_app/widgets/message_form_field.dart';
 import 'package:works_book_user_app/widgets/message_list.dart';
 
-class ChatScreen extends StatefulWidget {
+class UserChatScreen extends StatefulWidget {
   final UserInApplyModel userInApply;
 
-  const ChatScreen({
+  const UserChatScreen({
     required this.userInApply,
     super.key,
   });
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<UserChatScreen> createState() => _UserChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _UserChatScreenState extends State<UserChatScreen> {
   FmService fmService = FmService();
   UserMessageService messageService = UserMessageService();
   TextEditingController contentController = TextEditingController();
@@ -58,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     Expanded(
                       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                        stream: messageService.streamList(
+                        stream: messageService.streamUserId(
                           groupId: widget.userInApply.groupId,
                           sectionId: widget.userInApply.sectionId,
                           userId: userProvider.user?.id,

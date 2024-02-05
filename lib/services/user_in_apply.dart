@@ -35,12 +35,23 @@ class UserInApplyService {
     return ret;
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamList({
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamId({
     required String? userId,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)
         .where('id', isEqualTo: userId ?? 'error')
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamGroupSectionId({
+    required String? groupId,
+    required String? sectionId,
+  }) {
+    return firestore
+        .collection(collection)
+        .where('groupId', isEqualTo: groupId ?? 'error')
+        .where('sectionId', isEqualTo: sectionId ?? 'error')
         .snapshots();
   }
 }

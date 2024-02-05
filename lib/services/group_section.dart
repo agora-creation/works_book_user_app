@@ -25,7 +25,7 @@ class GroupSectionService {
     return ret;
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> stream({
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamGroupSectionId({
     String? groupId,
     String? subgroupId,
   }) {

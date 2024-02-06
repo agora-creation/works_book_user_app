@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Text(userProvider.user?.name ?? ''),
             ),
-            actions: userInApply != null
+            actions: userInApply != null && userInApply.accept
                 ? [
                     userInApply.admin
                         ? IconButton(

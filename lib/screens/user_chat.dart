@@ -38,25 +38,25 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
     return Container(
       color: kBackColor,
-      child: GestureDetector(
-        onTap: contentFocusNode.requestFocus,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 8,
-            right: 8,
-            bottom: 8,
-          ),
-          child: Card(
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Container(
-                color: kWhiteColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 8,
+          right: 8,
+          bottom: 8,
+        ),
+        child: Card(
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Container(
+              color: kWhiteColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: contentFocusNode.unfocus,
                       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                         stream: messageService.streamUserId(
                           groupId: widget.userInApply.groupId,
@@ -100,73 +100,73 @@ class _UserChatScreenState extends State<UserChatScreen> {
                         },
                       ),
                     ),
-                    MessageFormField(
-                      controller: contentController,
-                      galleryPressed: () async {
-                        String id = messageService.id(
-                          userId: userProvider.user?.id,
+                  ),
+                  MessageFormField(
+                    controller: contentController,
+                    galleryPressed: () async {
+                      String id = messageService.id(
+                        userId: userProvider.user?.id,
+                      );
+                      final picker = ImagePicker();
+                      final image = await picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (image == null) return;
+                      File imageFile = File(image.path);
+                      FirebaseStorage storage = FirebaseStorage.instance;
+                      String storagePath =
+                          'chat/${widget.userInApply.groupId}/${widget.userInApply.sectionId}/${userProvider.user?.id}/$id';
+                      final task =
+                          await storage.ref(storagePath).putFile(imageFile);
+                      messageService.create({
+                        'id': id,
+                        'userId': userProvider.user?.id,
+                        'groupId': widget.userInApply.groupId,
+                        'sectionId': widget.userInApply.sectionId,
+                        'content': '',
+                        'image': await task.ref.getDownloadURL(),
+                        'createdUserId': userProvider.user?.id,
+                        'createdAt': DateTime.now(),
+                      });
+                      if (widget.userInApply.admin) {
+                      } else {
+                        fmService.sendToAdmin(
+                          groupId: widget.userInApply.groupId,
+                          sectionId: widget.userInApply.sectionId,
+                          title: '新着メッセージがありました',
+                          body: '画像を送信しました。',
                         );
-                        final picker = ImagePicker();
-                        final image = await picker.pickImage(
-                          source: ImageSource.gallery,
+                      }
+                    },
+                    sendPressed: () async {
+                      if (contentController.text == '') return;
+                      String id = messageService.id(
+                        userId: userProvider.user?.id,
+                      );
+                      messageService.create({
+                        'id': id,
+                        'userId': userProvider.user?.id,
+                        'groupId': widget.userInApply.groupId,
+                        'sectionId': widget.userInApply.sectionId,
+                        'content': contentController.text,
+                        'image': '',
+                        'createdUserId': userProvider.user?.id,
+                        'createdAt': DateTime.now(),
+                      });
+                      if (widget.userInApply.admin) {
+                      } else {
+                        fmService.sendToAdmin(
+                          groupId: widget.userInApply.groupId,
+                          sectionId: widget.userInApply.sectionId,
+                          title: '新着メッセージがありました',
+                          body: contentController.text,
                         );
-                        if (image == null) return;
-                        File imageFile = File(image.path);
-                        FirebaseStorage storage = FirebaseStorage.instance;
-                        String storagePath =
-                            'chat/${widget.userInApply.groupId}/${widget.userInApply.sectionId}/${userProvider.user?.id}/$id';
-                        final task =
-                            await storage.ref(storagePath).putFile(imageFile);
-                        messageService.create({
-                          'id': id,
-                          'userId': userProvider.user?.id,
-                          'groupId': widget.userInApply.groupId,
-                          'sectionId': widget.userInApply.sectionId,
-                          'content': '',
-                          'image': await task.ref.getDownloadURL(),
-                          'createdUserId': userProvider.user?.id,
-                          'createdAt': DateTime.now(),
-                        });
-                        if (widget.userInApply.admin) {
-                        } else {
-                          fmService.sendToAdmin(
-                            groupId: widget.userInApply.groupId,
-                            sectionId: widget.userInApply.sectionId,
-                            title: '新着メッセージがありました',
-                            body: '画像を送信しました。',
-                          );
-                        }
-                      },
-                      sendPressed: () async {
-                        if (contentController.text == '') return;
-                        String id = messageService.id(
-                          userId: userProvider.user?.id,
-                        );
-                        messageService.create({
-                          'id': id,
-                          'userId': userProvider.user?.id,
-                          'groupId': widget.userInApply.groupId,
-                          'sectionId': widget.userInApply.sectionId,
-                          'content': contentController.text,
-                          'image': '',
-                          'createdUserId': userProvider.user?.id,
-                          'createdAt': DateTime.now(),
-                        });
-                        if (widget.userInApply.admin) {
-                        } else {
-                          fmService.sendToAdmin(
-                            groupId: widget.userInApply.groupId,
-                            sectionId: widget.userInApply.sectionId,
-                            title: '新着メッセージがありました',
-                            body: contentController.text,
-                          );
-                        }
-                        contentController.clear();
-                        contentFocusNode.unfocus();
-                      },
-                    ),
-                  ],
-                ),
+                      }
+                      contentController.clear();
+                      contentFocusNode.unfocus();
+                    },
+                  ),
+                ],
               ),
             ),
           ),
